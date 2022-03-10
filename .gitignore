@@ -1,0 +1,7 @@
+/makefile
+/archive
+/fisher
+/rffdtd
+
+.ipynb_checkpoints
+.python-version
