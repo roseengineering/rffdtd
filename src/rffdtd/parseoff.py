@@ -79,30 +79,26 @@ def update_ports(er, sigma, ports):
             if ix and np.all(er[ix] == 1) and np.all(sigma[ix] > 1e6):
                 axis = ax
 
-        shape = to_shape(index)
         if axis is not None:
-            # clear any inner axis-unaligned components
+            # clear all inner axis-unaligned components
             ix = prism_inner(index, axis)
             if ix:
                 er[ix] = 1
                 sigma[ix] = 0 
-        elif shape[0] == 1:
-            axis = index[0][0]
         else:
-            axis = 2
-            print(f'Warning: no axis found for port {i+1}, assuming Z.', file=sys.stderr)
+            print(f'Error: no axis found for port {i+1}, assuming Z.', file=sys.stderr)
+            sys.exit(1)
             
-        index = filter_axis(index, axis)
-        assert(index)   # there should be something here
-
         # all indices must form a cube
-        shape = to_shape(index)
-        assert(np.prod(shape) == len(index[0]))
+        ix = filter_axis(index, axis)
+        shape = to_shape(ix)
+        assert(ix)   # should be something here
+        assert(np.prod(shape) == len(ix[0]))
 
         # reset those indices
-        er[index] = 1
-        sigma[index] = 0
-        ports[i] = index 
+        er[ix] = 1
+        sigma[ix] = 0
+        ports[i] = ix
 
 
 # off parsing

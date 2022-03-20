@@ -100,6 +100,20 @@ def cubemag(index):
     return area, nfields
 
 
+def voltage_probes(ports):
+    probes = []
+    for i in range(len(ports)):
+        ix = ports[i]
+        axis = ix[0][0]
+        cmin = np.min(ix[1:], axis=1)
+        cmax = np.max(ix[1:], axis=1)
+        iu, ju, ku = cmin
+        ie, je, ke = cmax
+        res = np.s_[axis:axis+1, iu:ie+1, ju:je+1, ku:ke+1 ]
+        probes.append(res)
+    return probes
+
+
 def current_probes(ports):
     probes = []
     for i in range(len(ports)):
@@ -182,9 +196,9 @@ def simulate(filename,
 
     # load model
     er, sigma, ports = parseoff.parser(filename, ds=ds)
-
-    # initialize port resistances
     nport = len(ports)
+
+    # set port conductivities
     for ix in ports:
         area, nfields = cubemag(ix)
         sigma[ix] = 1 / (area / nfields * zline * ds)
@@ -211,7 +225,9 @@ def simulate(filename,
     stop = nport if stop is None else np.min((nport, stop))
     start = np.min((start, nport))
     stop = np.max((stop, start))
-    probes = current_probes(ports)
+    curr_probes = current_probes(ports)
+    volt_probes = voltage_probes(ports)
+    port_area = [ cubemag(ix)[0] for ix in ports ]
 
     # simulation payload
     payload = {
@@ -221,8 +237,10 @@ def simulate(filename,
         't0': t0,
         'ntau': ntau,
         'steps': steps,
-        'ports': ports,
-        'probes': probes,
+        'nport': nport,
+        'port_area': port_area,
+        'curr_probes': curr_probes,
+        'volt_probes': volt_probes,
         'zline': zline,
         'start': start,
         'stop': stop,
@@ -329,7 +347,7 @@ def show_progress(T, steps, n):
 
 def simulate_batch(start, stop, device, payload):
     steps = payload['steps']
-    nport = len(payload['ports'])
+    nport = payload['nport']
     ca = payload['ca']
     cb = payload['cb']
     assert(ca.dtype == np.float32)
@@ -355,8 +373,10 @@ def simulate_fdtd(n, device, payload):
     ca = payload['ca']
     cb = payload['cb']
     ds = payload['ds']
-    ports = payload['ports']
-    probes = payload['probes']
+    nport = payload['nport']
+    port_area = payload['port_area']
+    curr_probes = payload['curr_probes']
+    volt_probes = payload['volt_probes']
     zline = payload['zline']
     dtype = payload['dtype']
     steps = payload['steps']
@@ -368,33 +388,28 @@ def simulate_fdtd(n, device, payload):
     if dtype == 'float': dtype = torch.float32
 
     # simulation constants
-    nport = len(ports)
     shape = tuple(ca.shape + (np.arange(4) > 0))
-
-    # setup voltage and current 
     currents = np.zeros((nport, steps))
     voltages = np.ones((nport, steps))
     for i in range(nport):
-        area, nfields = cubemag(ports[i])
-        voltages[i] *= -1 / area
+        voltages[i] *= -1 / port_area[i]
 
     # initialize tensors for this simulation run
     E = torch.zeros(shape, dtype=dtype, device=device)
     H = torch.zeros(shape, dtype=dtype, device=device)
     vs = torch.tensor(excitation(steps, t0, ntau), dtype=dtype, device=device)
     gb = torch.tensor(fngb(ds), dtype=dtype, device=device)
-    ports = [ tuple(torch.tensor(d, device=device) for d in ix) for ix in ports ]
     currents = torch.tensor(currents, dtype=dtype, device=device)
     voltages = torch.tensor(voltages, dtype=dtype, device=device)
 
     # run simulation
     for T in range(steps):
         show_progress(T, steps, n)
-        update_hfield(E, H, gb)                   # 26 sec
-        capture_currents(H, probes, T, currents)  # 53 sec
-        update_efield(E, H, ca, cb)               # 30 sec
-        update_voltages(E, ports[n], T, vs)       # 4 sec
-        capture_voltages(E, ports, T, voltages)   # 23 sec
+        update_hfield(E, H, gb)
+        capture_currents(H, curr_probes, T, currents)
+        update_efield(E, H, ca, cb)
+        update_voltages(E, volt_probes[n], T, vs)
+        capture_voltages(E, volt_probes, T, voltages)  # 17s
     voltages = voltages.cpu()
     currents = currents.cpu()
 
