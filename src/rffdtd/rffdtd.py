@@ -75,17 +75,14 @@ def update_hfield(E, H, gb):
                               E[1,1:,:-1,:-1] + E[1,:-1,:-1,:-1])
 
 
-def capture_currents(H, probes, T, currents):
-    for i in range(len(probes)):
-        a, b, c, d = probes[i]
-        res = torch.sum(H[a]) + torch.sum(H[b]) - torch.sum(H[c]) - torch.sum(H[d])
-        currents[i,T] = res
+def capture_currents(H, indices, T, currents):
+    for i in range(len(indices)):
+        currents[i,T] = torch.sum(indices[i] * H)
 
 
-def capture_voltages(E, ports, T, voltages):
-    for i in range(len(ports)):
-        ix = ports[i]
-        voltages[i,T] *= torch.sum(E[ix])
+def capture_voltages(E, indices, T, voltages):
+    for i in range(len(indices)):
+        voltages[i,T] *= torch.sum(E[indices[i]])
 
 
 def update_voltages(E, ix, T, vs):
@@ -208,6 +205,7 @@ def simulate(filename,
     itemsize = 8 if dtype.lower() == 'double' else 4
     nbytes = (2 * er.size * er.itemsize +     # ca, cb
               2 * er.size * itemsize +        # E, H
+              nport * er.size +               # probes
               2 * nport * steps * itemsize +  # currents, voltages
               steps * itemsize)               # vs
     print('Each individual simulation needs about {:.3f} MiB of memory.'
@@ -225,9 +223,9 @@ def simulate(filename,
     stop = nport if stop is None else np.min((nport, stop))
     start = np.min((start, nport))
     stop = np.max((stop, start))
-    curr_probes = current_probes(ports)
-    volt_probes = voltage_probes(ports)
     port_area = [ cubemag(ix)[0] for ix in ports ]
+    cprobes_ix = current_probes(ports)
+    vprobes_ix = voltage_probes(ports)
 
     # simulation payload
     payload = {
@@ -239,8 +237,9 @@ def simulate(filename,
         'steps': steps,
         'nport': nport,
         'port_area': port_area,
-        'curr_probes': curr_probes,
-        'volt_probes': volt_probes,
+        'cprobes_ix': cprobes_ix,
+        'vprobes_ix': vprobes_ix,
+        'ports': ports,
         'zline': zline,
         'start': start,
         'stop': stop,
@@ -375,8 +374,9 @@ def simulate_fdtd(n, device, payload):
     ds = payload['ds']
     nport = payload['nport']
     port_area = payload['port_area']
-    curr_probes = payload['curr_probes']
-    volt_probes = payload['volt_probes']
+    cprobes_ix = payload['cprobes_ix']
+    vprobes_ix = payload['vprobes_ix']
+    ports = payload['ports']
     zline = payload['zline']
     dtype = payload['dtype']
     steps = payload['steps']
@@ -394,7 +394,7 @@ def simulate_fdtd(n, device, payload):
     for i in range(nport):
         voltages[i] *= -1 / port_area[i]
 
-    # initialize tensors for this simulation run
+    # initialize tensors on device
     E = torch.zeros(shape, dtype=dtype, device=device)
     H = torch.zeros(shape, dtype=dtype, device=device)
     vs = torch.tensor(excitation(steps, t0, ntau), dtype=dtype, device=device)
@@ -402,14 +402,25 @@ def simulate_fdtd(n, device, payload):
     currents = torch.tensor(currents, dtype=dtype, device=device)
     voltages = torch.tensor(voltages, dtype=dtype, device=device)
 
+    # initialize current probe tensors on device
+    cprobes = []
+    for i in range(nport):
+        d = torch.zeros(shape, dtype=torch.int8, device=device)
+        ix = cprobes_ix[i]
+        d[ix[0]] = 1
+        d[ix[1]] = 1
+        d[ix[2]] = -1
+        d[ix[3]] = -1
+        cprobes.append(d)
+
     # run simulation
     for T in range(steps):
         show_progress(T, steps, n)
         update_hfield(E, H, gb)
-        capture_currents(H, curr_probes, T, currents)
+        capture_currents(H, cprobes, T, currents)    # 54s (slice) / 19s (dense)
         update_efield(E, H, ca, cb)
-        update_voltages(E, volt_probes[n], T, vs)
-        capture_voltages(E, volt_probes, T, voltages)  # 17s
+        update_voltages(E, vprobes_ix[n], T, vs)
+        capture_voltages(E, vprobes_ix, T, voltages) # 16s (slice) / 21s (dense)
     voltages = voltages.cpu()
     currents = currents.cpu()
 
