@@ -57,11 +57,11 @@ Reproduced from Application of the Three-Dimensional Finite-Difference
 Time-Domain Method to the Analysis of Planar Microstrip Circuits,
 David Sheen, Sami Ali, IEEE MTT Vol 38, No 7, July 1990, p.849.
 Grid is 27.456 x 24.552 x 9.504 mm in size and composed of 348192 cells.
-Each individual simulation needs about 15.946 MiB of memory.
+Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 0.33 sec
+FDTD simulation time: 0 min 0.29 sec
 # HZ S DB R 50
 5.0048e+09    -10.082    48.73    -8.910   147.36      -inf     0.00      -inf     0.00
 1.0010e+10     -6.712  -114.52   -10.029   -37.08      -inf     0.00      -inf     0.00
@@ -80,23 +80,44 @@ To simulate a 1296 MHz interdigital filter [2], run:
 
 ```
 $ rffdtd --df 5e9 --pitch 1 examples/fisher.zip
-1296 MHz Interdigital 3-Pole Butterworth Filter, 110 MHz Bandwidth.
-Interdigital Bandpass Filters for Amateur V.H.F/U.H.F. Applications,
-High-Q Filter Construction Made Easy, Reed Fisher, March 1968 QST;
-reproduced in the ARRL Handbook 2017, p11.32, figure 11.63.
-Grid is 90 x 28 x 68 mm in size and composed of 171360 cells.
-Each individual simulation needs about 7.849 MiB of memory.
-Running 2 simulation(s) on device cuda.
+1296 MHz Interdigital 3-Pole Butterworth Filter, 110 MHz BW
+Grid is 94 x 28 x 68 mm in size and composed of 178976 cells.
+Each individual simulation needs about 10.764 MiB of memory.
+Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
- 260 / 260 / 2   
-FDTD simulation time: 0 min 0.40 sec
+ 260 / 260 / 5   
+FDTD simulation time: 0 min 1.10 sec
 # HZ S DB R 50
-1.9971e+09     -1.875    22.16   -55.293   -56.97   -55.293   -56.97    -1.875    22.16
-3.9943e+09     -0.182    -2.33   -59.472   154.44   -59.472   154.44    -0.182    -2.33
-5.9914e+09     -1.047   -51.54   -60.071     2.45   -60.071     2.45    -1.047   -51.54
-7.9886e+09    -16.478  -149.57   -58.951  -152.98   -58.951  -152.98   -16.478  -149.57
-9.9857e+09     -3.156    25.46   -56.457    50.32   -56.457    50.32    -3.156    25.46
-1.1983e+10     -2.501   -31.23   -52.593  -109.99   -52.593  -109.99    -2.501   -31.23
+1.9971e+09     -2.700    10.49   -45.187   -75.79    -9.870     5.80   -69.248   -97.87   -77.662   -90.26
+              -45.187   -75.79    -2.700    10.49   -77.662    89.74   -69.248    82.13    -9.870  -174.20
+               -9.890     4.96   -77.956    89.89   -12.125     9.51   -29.067   154.34   -77.614    67.75
+              -69.608   -97.87   -69.608    82.13   -29.051   154.29    -9.344    33.88   -29.051   154.29
+              -77.956   -90.11    -9.890  -175.04   -77.614    67.75   -29.067   154.34   -12.125     9.51
+3.9943e+09     -1.122     0.64   -50.024   118.48   -11.554  -116.71   -69.900    64.35   -81.100    94.40
+              -50.024   118.48    -1.122     0.64   -81.100   -85.60   -69.900  -115.65   -11.554    63.29
+              -11.653  -116.35   -81.354   -84.72   -11.366    17.85   -32.367    26.92   -77.992  -109.69
+              -70.083    64.47   -70.083  -115.53   -32.345    26.88    -6.106    29.11   -32.345    26.88
+              -81.354    95.28   -11.653    63.65   -77.992  -109.69   -32.367    26.92   -11.366    17.85
+5.9914e+09     -1.033   -45.75   -51.488   -48.30   -12.332   107.24   -65.300   -92.90   -81.155   -75.88
+              -51.488   -48.30    -1.033   -45.75   -81.155   104.12   -65.300    87.10   -12.332   -72.76
+              -12.351   108.05   -81.293   105.19   -10.618    18.19   -33.043  -110.47   -80.710    49.97
+              -65.220   -92.00   -65.220    88.00   -33.008  -110.46    -4.329    24.00   -33.008  -110.46
+              -81.293   -74.81   -12.351   -71.95   -80.710    49.97   -33.043  -110.47   -10.618    18.19
+7.9886e+09    -16.023  -101.87   -51.263   143.82   -12.927   -38.41   -61.870   132.13   -79.608   116.68
+              -51.263   143.82   -16.023  -101.87   -79.608   -63.32   -61.870   -47.87   -12.927   141.59
+              -12.983   -37.54   -79.773   -62.33   -12.147    13.29   -32.834   104.63   -68.063  -137.28
+              -61.676   133.51   -61.676   -46.49   -32.765   104.76    -3.590     8.65   -32.765   104.76
+              -79.773   117.67   -12.983   142.46   -68.063  -137.28   -32.834   104.63   -12.147    13.29
+9.9857e+09     -5.395     9.69   -49.613   -23.86   -13.003   165.88   -60.098    10.07   -76.946   -49.41
+              -49.613   -23.86    -5.395     9.69   -76.946   130.59   -60.098  -169.93   -13.003   -14.12
+              -13.076   167.74   -77.134   132.43   -14.239    70.09   -32.062   -46.92   -59.023    91.77
+              -59.685    12.23   -59.685  -167.77   -31.954   -46.81    -6.965     6.90   -31.954   -46.81
+              -77.134   -47.57   -13.076   -12.26   -59.023    91.77   -32.062   -46.92   -14.239    70.09
+1.1983e+10     -7.742   -31.02   -46.628   166.61   -11.879     0.34   -59.510   -91.19   -73.323   143.90
+              -46.628   166.61    -7.742   -31.02   -73.323   -36.10   -59.510    88.81   -11.879  -179.66
+              -11.888     3.00   -73.461   -33.63    -4.991    61.32   -30.592   152.76   -52.460   -33.02
+              -58.714   -90.96   -58.714    89.04   -30.484   153.02    -3.068    28.58   -30.484   153.02
+              -73.461   146.37   -11.888  -177.00   -52.460   -33.02   -30.592   152.76    -4.991    61.32
 ```
 
 
@@ -149,23 +170,23 @@ For example the interdigital filter uses the following OFF files and file names:
 ```
 $ unzip -l examples/fisher.zip
 Archive:  examples/fisher.zip
-1296 MHz Interdigital 3-Pole Butterworth Filter, 110 MHz Bandwidth.
-Interdigital Bandpass Filters for Amateur V.H.F/U.H.F. Applications,
-High-Q Filter Construction Made Easy, Reed Fisher, March 1968 QST;
-reproduced in the ARRL Handbook 2017, p11.32, figure 11.63.
+1296 MHz Interdigital 3-Pole Butterworth Filter, 110 MHz BW
   Length      Date    Time    Name
 ---------  ---------- -----   ----
-      492  1980-01-01 00:00   cover-sigma62.11e6.off
-     1836  1980-01-01 00:00   box-silver.off
-     2524  1980-01-01 00:00   rods0-brass.off
-     2456  1980-01-01 00:00   rods1-brass.off
-     2474  1980-01-01 00:00   rods2-brass.off
+      492  1980-01-01 00:00   lid-aluminum.off
+     1836  1980-01-01 00:00   box-aluminum.off
+     5126  1980-01-01 00:00   rods1-aluminum.off
+      123  1980-01-01 00:00   port3.off
+     5072  1980-01-01 00:00   rods2-aluminum.off
+      105  1980-01-01 00:00   port4.off
+     5026  1980-01-01 00:00   rods3-aluminum.off
+      118  1980-01-01 00:00   port5.off
       479  1980-01-01 00:00   tap1-copper.off
       479  1980-01-01 00:00   port1.off
       465  1980-01-01 00:00   tap2-copper.off
       465  1980-01-01 00:00   port2.off
 ---------                     -------
-    11670                     9 files
+    19786                     12 files
 ```
 
 
