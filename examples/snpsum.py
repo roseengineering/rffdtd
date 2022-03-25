@@ -5,8 +5,8 @@
 # and output the result.  This may be useful for running
 # a batch of simulations (each exciting a different set of
 # ports) on multiple machines against the same model.
-# The results can be pulled together onto on machine and
-# summed up into one sparameter matrix with this utility.
+# The results can then be pulled together onto one machine
+# and summed up into one sparameter matrix using this utility.
 
 import sys
 sys.path.append('../src')

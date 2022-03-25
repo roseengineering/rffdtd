@@ -183,7 +183,8 @@ def simulate(filename,
              steps=None, 
              start=None, 
              stop=None, 
-             ngpu=None
+             ngpu=None,
+             symmetric=False
             ):
 
     # calculate steps
@@ -273,8 +274,10 @@ def simulate(filename,
             print(f'Using GPU: {name}', file=sys.stderr)
         sparam = simulate_batch(start, stop, device, payload)
 
-    # convert back to numpy from pytorch
+    # convert to numpy
     sparam = sparam.numpy()
+    if symmetric:
+        sparam = np.tril(sparam) + np.transpose(np.tril(sparam, k=-1), axes=(0,2,1))
 
     # show elapsed time
     elapsed = time.time() - payload['time']
@@ -431,8 +434,4 @@ def simulate_fdtd(n, device, payload):
     a = 0.5 * (voltages + zline * currents) / np.sqrt(zline)
     b = 0.5 * (voltages - zline * currents) / np.sqrt(zline)
     return (b / a[n]).T
-
-
-
-
 

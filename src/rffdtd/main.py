@@ -36,6 +36,8 @@ def parse_args():
                         help='"float" or "double" data type')
     parser.add_argument('--device', 
                         help='"cuda" or "cpu" compute device, otherwise will autodetect')
+    parser.add_argument('--symmetric', action='store_true', 
+                        help='make s-parameter matrices symmetric')
     return parser.parse_args()
 
 
@@ -51,6 +53,7 @@ def main():
             ds=ds, df=args.df, steps=args.steps, zline=args.zline, 
             start=args.start, stop=args.stop,
             ntau=args.ntau, ndelay=args.ndelay,
-            ngpu=args.ngpu, dtype=args.dtype, device=args.device)
+            ngpu=args.ngpu, symmetric=args.symmetric,
+            dtype=args.dtype, device=args.device)
         write_touchstone(freq, sparam, zline=args.zline, filename=args.output)
 
