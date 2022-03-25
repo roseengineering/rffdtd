@@ -9,7 +9,7 @@
 # summed up into one sparameter matrix with this utility.
 
 import sys
-sys.path.append('../rffdtd')
+sys.path.append('../src')
 
 import numpy as np
 from rffdtd import read_touchstone, write_touchstone

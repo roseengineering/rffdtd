@@ -223,6 +223,7 @@ def simulate(filename,
     stop = nport if stop is None else np.min((nport, stop))
     start = np.min((start, nport))
     stop = np.max((stop, start))
+
     port_area = [ cubemag(ix)[0] for ix in ports ]
     cprobes_ix = current_probes(ports)
     vprobes_ix = voltage_probes(ports)

@@ -1,6 +1,6 @@
 
 import sys
-sys.path.append('../rffdtd')
+sys.path.append('../src')
 
 import numpy as np
 from csg.core import CSG

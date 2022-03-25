@@ -1,67 +1,101 @@
 
 import sys
-sys.path.append('../rffdtd')
+sys.path.append('../src')
 
+import os
 import numpy as np
 from io import BytesIO
 from csg.core import CSG
-from rffdtd.csgsave import openzip
+from rffdtd.csgsave import openzip, polygon, rectangle
 
+mm = 25.4
 
 def sign(value):
     return 2 * bool(value) - 1
 
 
-def design(adjust_tap=0, filename=None):
-    mm = 25.4
+def design(port_tuning=True, tap_adj=11, rodlen_adj='3,0,3', rodsep_adj='2,2', filename=None):
+    tap_adj = float(tap_adj)
+    rodlen_adj = np.array([ float(d) for d in rodlen_adj.split(',') ])
+    rodsep_adj = np.array([ float(d) for d in rodsep_adj.split(',') ])
+
+    screw = .112 * mm   # 4-40 screw
     diam = .250 * mm
-    taph = .297 * mm + adjust_tap
-
-    boxh = 2.375 * mm
-    rodlen = np.array([ 2.1, 2.1, 2.1 ]) * mm
-    rodsep = np.array([ .8, .8 ]) * mm
-    rodpos = np.cumsum(np.hstack((0, rodsep))) - np.sum(rodsep) / 2
-
     thick = 2
-    endsep = .8 * mm
+    boxh = 2.375 * mm
     boxb = .75 * mm
-    boxl = np.sum(rodsep) + 2 * endsep
+    endsep = .8 * mm
 
-    comment = """\
-1296 MHz Interdigital 3-Pole Butterworth Filter, 110 MHz Bandwidth.
-Interdigital Bandpass Filters for Amateur V.H.F/U.H.F. Applications,
-High-Q Filter Construction Made Easy, Reed Fisher, March 1968 QST;
-reproduced in the ARRL Handbook 2017, p11.32, figure 11.63.
-"""
+    tap = .297 * mm + tap_adj
+    rodlen = np.array([ 2.1, 2.1, 2.1 ]) * mm + rodlen_adj
+    rodsep = np.array([ .8, .8 ]) * mm + rodsep_adj
+
+    ###################
+
+    rodpos = np.cumsum(np.hstack((0, rodsep))) - np.sum(rodsep) / 2
+    boxl = np.sum(rodsep) + 2 * endsep
+    N = len(rodlen)
+    comment = '1296 MHz Interdigital 3-Pole Butterworth Filter, 110 MHz BW'
 
     filename = filename or BytesIO()
     with openzip(filename, comment=comment) as zf:
         cavity = np.array((boxl, boxb, boxh))
 
+        # create lid 
+        r = (cavity[0] / 2 + thick, thick / 2, cavity[2] / 2 + thick)
+        cover = CSG.cube(radius=list(r))
+        cover.translate((0, -(boxb + thick) / 2, 0))
+        zf.saveoff('lid-aluminum', cover)
+        #zf.saveoff('cover-sigma62.11e6', cover)
+
+        # create box
         r = cavity / 2
         inner = CSG.cube(radius=list(r))
         outer = CSG.cube(radius=list(r + thick))
+        hcube = outer - inner
+        box = hcube - cover
+        zf.saveoff('box-aluminum', box)
 
-        r = (r[0] + thick, thick / 2, r[2] + thick)
-        c = (0, -(boxb + thick) / 2, 0)
-        cover = CSG.cube(center=list(c), radius=list(r))
-        zf.saveoff('cover-sigma62.11e6', cover)
-
-        box = outer - inner - cover
-        zf.saveoff('box-silver', box)
-    
         #########################
         # rods
         #########################
 
-        for i in range(len(rodlen)):
+        for i in range(N):
             x = rodpos[i]
-            z = rodlen[i]
-            start = [0,0,0]
-            end = [0, 0, -sign(i % 2) * z]
-            d = CSG.cylinder(radius=diam/2, start=start, end=end)
-            d.translate((x, 0, sign(i % 2) * cavity[2] / 2))
-            zf.saveoff(f'rods{i}-brass', d)
+            z = cavity[2] / 2
+            minspace = 1
+            if i % 2 == 0:
+                start = [x,0,-z]
+                end = [x,0,rodlen[i]-z] 
+                solid = CSG.cylinder(radius=diam/2, start=start, end=end)
+
+                # screw
+                zscrew = rodlen[i] / 2 + minspace / 2
+                start = [x,0,zscrew]
+                end = [x,0,z]
+                solid += CSG.cylinder(radius=screw/2, start=start, end=end)
+                zf.saveoff(f'rods{i+1}-aluminum', solid)
+
+                # tuning port
+                if port_tuning:
+                    solid = rectangle((x-1,0, zscrew), (x+1,0,rodlen[i]-z))
+                    zf.saveoff(f'port{i+3}', solid)
+            else:
+                start = [x,0,z]
+                end = [x,0,z-rodlen[i]] 
+                solid = CSG.cylinder(radius=diam/2, start=start, end=end)
+
+                # screw
+                zscrew = -rodlen[i] / 2 - minspace / 2
+                start = [x,0, zscrew]
+                end = [x,0,-z]
+                solid += CSG.cylinder(radius=screw/2, start=start, end=end)
+                zf.saveoff(f'rods{i+1}-aluminum', solid)
+
+                # tuning port
+                if port_tuning:
+                    solid = rectangle((x-1,0,zscrew), (x+1,0,z-rodlen[i]))
+                    zf.saveoff(f'port{i+3}', solid)
 
         #########################
         # taps
@@ -72,7 +106,7 @@ reproduced in the ARRL Handbook 2017, p11.32, figure 11.63.
 
         # first tap
 
-        h = taph - cavity[2] / 2
+        h = tap - cavity[2] / 2
         x1 = -cavity[0] / 2
         x2 = rodpos[0]
 
@@ -88,7 +122,7 @@ reproduced in the ARRL Handbook 2017, p11.32, figure 11.63.
 
         # end tap
 
-        h = -sign(i % 2) * (taph - cavity[2] / 2)
+        h = -sign(i % 2) * (tap - cavity[2] / 2)
         x1 = rodpos[-1]
         x2 = cavity[0] / 2
 
@@ -100,16 +134,14 @@ reproduced in the ARRL Handbook 2017, p11.32, figure 11.63.
         r = np.array((w, w, w)) / 2
         port2 = CSG.cube(radius=list(r))
         port2.translate((x2 - r[0], w / 2, h))
-        zf.saveoff('port2', port2)
+        zf.saveoff(f'port2', port2)
 
     return filename
 
 
-def main(filename, adjust_tap=0):
-    import os
-    adjust_tap = float(adjust_tap)
+def main(filename, *d):
     filename = os.path.basename(os.path.splitext(filename)[0])
-    design(adjust_tap=adjust_tap, filename=filename)
+    design(*d, filename=filename)
 
         
 if __name__ == "__main__":
