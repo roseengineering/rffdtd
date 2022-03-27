@@ -274,17 +274,17 @@ def simulate(filename,
             print(f'Using GPU: {name}', file=sys.stderr)
         sparam = simulate_batch(start, stop, device, payload)
 
-    # convert to numpy
-    sparam = sparam.numpy()
-    if symmetric:
-        sparam = np.tril(sparam) + np.transpose(np.tril(sparam, k=-1), axes=(0,2,1))
-
     # show elapsed time
     elapsed = time.time() - payload['time']
     print('\nFDTD simulation time: {:d} min {:.2f} sec'.format(
           int(elapsed / 60), elapsed % 60), file=sys.stderr)
 
-    # keep resolvable frequencies
+    # convert to numpy
+    sparam = sparam.numpy()
+    if symmetric:
+        sparam = np.tril(sparam) + np.transpose(np.tril(sparam, k=-1), axes=(0,2,1))
+
+    # exclude unresolvable frequencies
     fmax = fmaxtimewidth(ntau, ds)
     df = stepstodf(steps, ds)
     nfreq = int(fmax / df) + 1

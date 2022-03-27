@@ -99,12 +99,16 @@ of 1, is: sigma99.99e9 or sigma_99.99e9.
 To define both permittivity and conductivity the naming format is 
 er99.99e9_99.99e9 or er_99.99e9_99.99e9.
 
+## Ports
+
 To create a port, use a material name of port99 or port_99, starting
 from port number 1.  The port will be a "lumped" port.  The opposite faces of the 
 port should overlap a conductor.  A port can only be represented by a cube or 
 a plane, but not a cylinder for example.
 
-The PEC cage mentioned above will abutt the bounding box of your model with a padding 
+## Expanding The PEC Cage
+
+The PEC cage, as mentioned above, will abutt the bounding box of your model with a padding 
 of one cell.  To enlarge the bounding box use the air material.  The air material will be dropped and 
 ignored when the model is voxelized.  However it will be considered when calculating
 the model's bounding box.  See the lowpass and coupler examples.

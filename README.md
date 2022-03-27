@@ -86,7 +86,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 1.10 sec
+FDTD simulation time: 0 min 1.02 sec
 # HZ S DB R 50
 1.9971e+09     -2.700    10.49   -45.187   -75.79    -9.870     5.80   -69.248   -97.87   -77.662   -90.26
               -45.187   -75.79    -2.700    10.49   -77.662    89.74   -69.248    82.13    -9.870  -174.20
@@ -130,7 +130,7 @@ Also see the examples.ipynb Jupyter notebook in the repo for plots and more.
 $ rffdtd --help
 usage: rffdtd [-h] [--output OUTPUT] [--export EXPORT] [--start START] [--stop STOP]
               [--pitch PITCH] [--df DF] [--steps STEPS] [--ntau NTAU] [--ndelay NDELAY]
-              [--zline ZLINE] [--ngpu NGPU] [--dtype DTYPE] [--device DEVICE]
+              [--zline ZLINE] [--ngpu NGPU] [--dtype DTYPE] [--device DEVICE] [--symmetric]
               filename [filename ...]
 
 positional arguments:
@@ -151,6 +151,7 @@ optional arguments:
   --ngpu NGPU      number of GPUs to use, or all by default (default: None)
   --dtype DTYPE    "float" or "double" data type (default: float)
   --device DEVICE  "cuda" or "cpu" compute device, otherwise will autodetect (default: None)
+  --symmetric      make s-parameter matrices symmetric (default: False)
 ```
 
 
@@ -198,12 +199,16 @@ of 1, is: sigma99.99e9 or sigma_99.99e9.
 To define both permittivity and conductivity the naming format is 
 er99.99e9_99.99e9 or er_99.99e9_99.99e9.
 
+## Ports
+
 To create a port, use a material name of port99 or port_99, starting
 from port number 1.  The port will be a "lumped" port.  The opposite faces of the 
 port should overlap a conductor.  A port can only be represented by a cube or 
 a plane, but not a cylinder for example.
 
-The PEC cage mentioned above will abutt the bounding box of your model with a padding 
+## Expanding The PEC Cage
+
+The PEC cage, as mentioned above, will abutt the bounding box of your model with a padding 
 of one cell.  To enlarge the bounding box use the air material.  The air material will be dropped and 
 ignored when the model is voxelized.  However it will be considered when calculating
 the model's bounding box.  See the lowpass and coupler examples.

@@ -60,6 +60,7 @@ def design(port_tuning=True, tap_adj=11, rodlen_adj='3,0,3', rodsep_adj='2,2', f
         # rods
         #########################
 
+        portnum = 2
         for i in range(N):
             x = rodpos[i]
             z = cavity[2] / 2
@@ -79,7 +80,8 @@ def design(port_tuning=True, tap_adj=11, rodlen_adj='3,0,3', rodsep_adj='2,2', f
                 # tuning port
                 if port_tuning:
                     solid = rectangle((x-1,0, zscrew), (x+1,0,rodlen[i]-z))
-                    zf.saveoff(f'port{i+3}', solid)
+                    zf.saveoff(f'port{portnum}', solid)
+                    portnum += 1
             else:
                 start = [x,0,z]
                 end = [x,0,z-rodlen[i]] 
@@ -95,7 +97,8 @@ def design(port_tuning=True, tap_adj=11, rodlen_adj='3,0,3', rodsep_adj='2,2', f
                 # tuning port
                 if port_tuning:
                     solid = rectangle((x-1,0,zscrew), (x+1,0,z-rodlen[i]))
-                    zf.saveoff(f'port{i+3}', solid)
+                    zf.saveoff(f'port{portnum}', solid)
+                    portnum += 1
 
         #########################
         # taps
@@ -134,7 +137,7 @@ def design(port_tuning=True, tap_adj=11, rodlen_adj='3,0,3', rodsep_adj='2,2', f
         r = np.array((w, w, w)) / 2
         port2 = CSG.cube(radius=list(r))
         port2.translate((x2 - r[0], w / 2, h))
-        zf.saveoff(f'port2', port2)
+        zf.saveoff(f'port{portnum}', port2)
 
     return filename
 
