@@ -3,7 +3,8 @@
 import os, subprocess, re 
 
 def run(command, language='', nopython=False):
-    cmd = command if nopython else f"COLUMNS=95 PYTHONPATH=. python3 {command}" 
+    cmd = command if nopython else f"COLUMNS=95 PYTHONPATH=src python3 {command}" 
+    command = command.replace('src/__main__.py', 'rffdtd')
     proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     buf = proc.stdout.read().decode()
     buf = re.sub(r'^.*( \d+ / \d+ / \d+.*)$', r'\g<1>', buf, flags=re.MULTILINE)
@@ -65,17 +66,17 @@ The --df option sets the frequency step you want the s-parameter results to prov
 --pitch option sets the length of a side of a FDTD grid cell in millimeters to use.
 The --stop option tells rffdtd which port it should excite last.
 
-{run("rffdtd --df 5e9 --stop 1 --pitch .264 examples/lowpass.zip")}
+{run("src/__main__.py --df 5e9 --stop 1 --pitch .264 examples/lowpass.zip")}
 
 To simulate a 1296 MHz interdigital filter [2], run:
 
-{run("rffdtd --df 5e9 --pitch 1 examples/fisher.zip")}
+{run("src/__main__.py --df 5e9 --pitch 1 examples/fisher.zip")}
 
 Also see the examples.ipynb Jupyter notebook in the repo for plots and more.
 
 ## Usage
 
-{run("rffdtd --help")}
+{run("src/__main__.py --help")}
 
 ## Materials
 
@@ -170,9 +171,15 @@ microwave coupler in the example directory.
 
 ## Installation
 
-To build rffdtd, run the following then copy it to the directory you want.
+To build rffdtd, run the following then copy the resulting executable rffdtd to whichever directory you want.
 
-{ run("sh build.sh", nopython=True) }
+```
+$ sh build.sh
+python res/zip.py -s 1 -o rffdtd src/* src/*/*
+echo '#!/usr/bin/env python3' | cat - rffdtd.zip > rffdtd
+rm rffdtd.zip
+chmod 755 rffdtd
+```
 
 Or you can pip install it in this directory with:
 
@@ -195,18 +202,19 @@ Run a simulation:
 
 ```python
 freq, sparam = rffdtd.simulate(
-    filename,      # file descriptor or name or as list of OFF or ZIP geometry files
-    df=None,       # frequency step in Hz to resolve, sets simulation steps
-    ds=.001,       # length of a side of a uniform cell in m
-    ntau=20,       # pulse width of excitation in units of simulation steps
-    ndelay=6.5,    # time delay of excitation in units of pulse widths
-    zline=50,      # line impedance of ports in ohms
-    dtype='float', # "float" or "double" data type'
-    device=None    # "cuda" or "cpu" compute device, otherwise will autodetect
-    steps=None,    # explicitly set number of simulation steps
-    start=None,    # first port to excite, starting from 1
-    stop=None,     # last port to excite, starting from 1
-    ngpu=None      # number of GPUs to use, or all by default
+    filename,       # file descriptor or name or as list of OFF or ZIP geometry files
+    df=None,        # frequency step in Hz to resolve, sets simulation steps
+    ds=.001,        # length of a side of a uniform cell in m
+    ntau=20,        # pulse width of excitation in units of simulation steps
+    ndelay=6.5,     # time delay of excitation in units of pulse widths
+    zline=50,       # line impedance of ports in ohms
+    dtype='float',  # "float" or "double" data type'
+    device=None     # "cuda" or "cpu" compute device, otherwise will autodetect
+    steps=None,     # explicitly set number of simulation steps
+    start=None,     # first port to excite, starting from 1
+    stop=None,      # last port to excite, starting from 1
+    ngpu=None,      # number of GPUs to use, or all by default
+    symmetric=False # make s-parameter matrices symmetric
     )
 ```
 
