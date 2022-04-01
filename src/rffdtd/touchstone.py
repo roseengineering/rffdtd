@@ -5,7 +5,7 @@ import numpy as np
 from .conf import DEFAULT_ZLINE
 
 
-def write_touchstone(freq, sparam, zline=DEFAULT_ZLINE, filename=None):
+def write_touchstone(freq, sparam, filename=None, zline=DEFAULT_ZLINE):
     nfreq = sparam.shape[0]
     nport = sparam.shape[1]
     ma = np.abs(sparam)

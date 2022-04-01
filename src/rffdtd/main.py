@@ -55,5 +55,5 @@ def main():
             ntau=args.ntau, ndelay=args.ndelay,
             ngpu=args.ngpu, symmetric=args.symmetric,
             dtype=args.dtype, device=args.device)
-        write_touchstone(freq, sparam, zline=args.zline, filename=args.output)
+        write_touchstone(freq, sparam, filename=args.output, zline=args.zline)
 
