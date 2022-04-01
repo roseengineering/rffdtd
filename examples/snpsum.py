@@ -8,9 +8,6 @@
 # The results can then be pulled together onto one machine
 # and summed up into one sparameter matrix using this utility.
 
-import sys
-sys.path.append('../src')
-
 import numpy as np
 from rffdtd import read_touchstone, write_touchstone
 
@@ -30,5 +27,6 @@ def main(*filename):
 
 
 if __name__ == "__main__":
+    import sys
     main(*sys.argv[1:])
 

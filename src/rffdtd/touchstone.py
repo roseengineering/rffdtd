@@ -5,7 +5,7 @@ import numpy as np
 from .conf import DEFAULT_ZLINE
 
 
-def buffer_touchstone(freq, sparam, zline=DEFAULT_ZLINE):
+def write_touchstone(freq, sparam, zline=DEFAULT_ZLINE, filename=None):
     nfreq = sparam.shape[0]
     nport = sparam.shape[1]
     ma = np.abs(sparam)
@@ -21,12 +21,9 @@ def buffer_touchstone(freq, sparam, zline=DEFAULT_ZLINE):
                 buf += '  {:11.5e} {:8.2f}'.format(ma[ix], ph[ix])
         lines.append(buf)
     lines.append('')
-    return '\n'.join(lines)
+    buf = '\n'.join(lines)
 
-
-def write_touchstone(freq, sparam, zline=DEFAULT_ZLINE, filename=None):
-    buf = buffer_touchstone(freq, sparam, zline=zline)
-    nport = sparam.shape[1]
+    # write out
     if filename is None:
         print(buf, end='')
     else:
