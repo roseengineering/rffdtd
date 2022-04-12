@@ -242,9 +242,9 @@ rffdtd.read_touchstone(
     )
 ```
 
-## snpsum.py
+## util/snpsum.py
 
-The script snpsum.py sums up the sparameters matrices 
+The script snpsum.py in the util directory sums up the sparameters matrices 
 for each frequency across all the touchstone files passed on the 
 command line.  It then outputs the result to the console.
 
@@ -252,7 +252,7 @@ snpsum.py should be useful when running
 a batch of simulations (each exciting a different set of
 ports) on multiple machines against the same model.
 All the touchstone file results can then be pulled together onto one machine
-and summed up into one sparameter matrix using this utility.
+and summed up into one aggregated touchstone file using this utility.
 
 
 ## Notes

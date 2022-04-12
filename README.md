@@ -61,7 +61,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 0.30 sec
+FDTD simulation time: 0 min 0.27 sec
 # HZ S MA R 50
 5.0048e+09   3.13273e-01    48.73  3.58495e-01   147.36  0.00000e+00     0.00  0.00000e+00     0.00
 1.0010e+10   4.61764e-01  -114.52  3.15175e-01   -37.08  0.00000e+00     0.00  0.00000e+00     0.00
@@ -86,7 +86,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 1.01 sec
+FDTD simulation time: 0 min 1.00 sec
 # HZ S MA R 50
 1.9971e+09   7.32801e-01    10.49  3.21009e-01     5.80  3.44816e-04   -97.87  1.30885e-04   -90.26  5.50376e-03   -75.79
              3.20273e-01     4.96  2.47599e-01     9.51  3.52097e-02   154.34  1.31618e-04    67.75  1.26525e-04    89.89
@@ -342,9 +342,9 @@ rffdtd.read_touchstone(
     )
 ```
 
-## snpsum.py
+## util/snpsum.py
 
-The script snpsum.py sums up the sparameters matrices 
+The script snpsum.py in the util directory sums up the sparameters matrices 
 for each frequency across all the touchstone files passed on the 
 command line.  It then outputs the result to the console.
 
@@ -352,7 +352,7 @@ snpsum.py should be useful when running
 a batch of simulations (each exciting a different set of
 ports) on multiple machines against the same model.
 All the touchstone file results can then be pulled together onto one machine
-and summed up into one sparameter matrix using this utility.
+and summed up into one aggregated touchstone file using this utility.
 
 
 ## Notes
