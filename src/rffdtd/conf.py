@@ -1,7 +1,7 @@
 
 import numpy as np
 
-CONDUCTOR = {
+CONDUCTORS = {
     'pec':      np.inf,
     'silver':   62.1e6,  # s/m
     'copper':   58.7e6,

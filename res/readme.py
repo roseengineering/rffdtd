@@ -93,16 +93,15 @@ For example the interdigital filter uses the following OFF files and file names:
 {run("unzip -l examples/fisher.zip", nopython=True)}
 
 To support other materials, for example PCB substrates with a certain permittivity, use
-the following naming format for the material: er99.99e9 or er_99.99e9.
-The underscore can be replaced with a space if needed.
+the following naming format for the material: er99.99e9.
 For conductors, the naming convention, assuming a permittivity
-of 1, is: sigma99.99e9 or sigma_99.99e9.
+of 1, is: sigma99.99e9.
 To define both permittivity and conductivity the naming format is 
-er99.99e9_99.99e9 or er_99.99e9_99.99e9.
+er99.99e9_99.99e9, the underscore separating the two.
 
 ## Ports
 
-To create a port, use a material name of port99 or port_99, starting
+To create a port, use a material name of port99 starting
 from port number 1.  The port will be a "lumped" port.  The opposite faces of the 
 port should overlap a conductor.  A port can only be represented by a cube or 
 a plane, but not a cylinder for example.
@@ -233,8 +232,8 @@ Load or save s-sparameters to a touchstone file:
 rffdtd.write_touchstone(
     freq,          # list of frequencies corresponding to each s-parameter matrix
     sparam,        # list of s-parameter matrices
-    zline=50,      # line impedance of ports in ohms
     filename=None  # name of file to write touchstone output to, instead of console
+    zline=50,      # line impedance of ports in ohms
     )
 
 rffdtd.read_touchstone(

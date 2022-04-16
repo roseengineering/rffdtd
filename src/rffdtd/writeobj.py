@@ -2,7 +2,7 @@
 import os
 import numpy as np
 
-from .conf import CONDUCTOR
+from .conf import CONDUCTORS
 
 
 def save(filename, er, sigma, ds):
@@ -45,7 +45,7 @@ def save(filename, er, sigma, ds):
 
     for ix in zip(*np.where(np.all([ er == 1, sigma != 0 ], axis=0))):
         color = (143,0,255)  # electric violet
-        data = [ k for k in CONDUCTOR if CONDUCTOR[k] == sigma[ix] ]
+        data = [ k for k in CONDUCTORS if CONDUCTORS[k] == sigma[ix] ]
         name = data[0] if data else 'sigma {:g}'.format(sigma[ix]).replace('+', '')
         if name == 'silver': color = (192,192,192)
         elif name == 'copper': color = (184,115,51)

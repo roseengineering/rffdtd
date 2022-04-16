@@ -61,7 +61,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 0.27 sec
+FDTD simulation time: 0 min 4.07 sec
 # HZ S MA R 50
 5.0048e+09   3.13273e-01    48.73  3.58495e-01   147.36  0.00000e+00     0.00  0.00000e+00     0.00
 1.0010e+10   4.61764e-01  -114.52  3.15175e-01   -37.08  0.00000e+00     0.00  0.00000e+00     0.00
@@ -86,7 +86,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 1.00 sec
+FDTD simulation time: 0 min 4.92 sec
 # HZ S MA R 50
 1.9971e+09   7.32801e-01    10.49  3.21009e-01     5.80  3.44816e-04   -97.87  1.30885e-04   -90.26  5.50376e-03   -75.79
              3.20273e-01     4.96  2.47599e-01     9.51  3.52097e-02   154.34  1.31618e-04    67.75  1.26525e-04    89.89
@@ -193,16 +193,15 @@ Archive:  examples/fisher.zip
 
 
 To support other materials, for example PCB substrates with a certain permittivity, use
-the following naming format for the material: er99.99e9 or er_99.99e9.
-The underscore can be replaced with a space if needed.
+the following naming format for the material: er99.99e9.
 For conductors, the naming convention, assuming a permittivity
-of 1, is: sigma99.99e9 or sigma_99.99e9.
+of 1, is: sigma99.99e9.
 To define both permittivity and conductivity the naming format is 
-er99.99e9_99.99e9 or er_99.99e9_99.99e9.
+er99.99e9_99.99e9, the underscore separating the two.
 
 ## Ports
 
-To create a port, use a material name of port99 or port_99, starting
+To create a port, use a material name of port99 starting
 from port number 1.  The port will be a "lumped" port.  The opposite faces of the 
 port should overlap a conductor.  A port can only be represented by a cube or 
 a plane, but not a cylinder for example.
@@ -333,8 +332,8 @@ Load or save s-sparameters to a touchstone file:
 rffdtd.write_touchstone(
     freq,          # list of frequencies corresponding to each s-parameter matrix
     sparam,        # list of s-parameter matrices
-    zline=50,      # line impedance of ports in ohms
     filename=None  # name of file to write touchstone output to, instead of console
+    zline=50,      # line impedance of ports in ohms
     )
 
 rffdtd.read_touchstone(

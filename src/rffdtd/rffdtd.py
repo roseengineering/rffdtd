@@ -231,6 +231,7 @@ def simulate(filename,
 
     # simulation payload
     payload = {
+        'time': time.time(),
         'ca': ca,
         'cb': cb,
         'ds': ds,
@@ -369,9 +370,6 @@ def simulate_batch(start, stop, device, payload):
 
 
 def simulate_fdtd(n, device, payload):
-    if 'time' not in payload:
-        payload['time'] = time.time()
-
     # unload payload
     ca = payload['ca']
     cb = payload['cb']

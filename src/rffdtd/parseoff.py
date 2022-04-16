@@ -6,7 +6,7 @@ import zipfile
 import numpy as np
 
 from .voxzbuf import voxelize
-from .conf import CONDUCTOR, MARGIN, PADDING
+from .conf import CONDUCTORS, MARGIN, PADDING
 
 
 # basic utilities
@@ -202,31 +202,28 @@ def is_conductor(d):
     return d[0] == 'er' and d[1] == 1 and d[2] != 0
 
 
-def parse_material(basename):
-    name = basename.replace('_', ' ')
-    name = name.lower().split('-')[-1]
-    d = tuple(name.split()) or ('pec',)
+def parse_material(name):
+    name = name.split('-', 1)[-1].strip().lower()
+    m = re.search('^([a-zA-Z]+)$', name)
+    if m and m.group(1) in CONDUCTORS:
+        return ('er', 1, CONDUCTORS[m.group(0)])
+    m = re.search('^([a-zA-Z]+)([\d\.]+)$', name)
+    if (m and m.group(1) == 'sigma' 
+        and tofloat(m.group(2)) is not None):
+        return ('er', 1, tofloat(m.group(2)))
+    if (m and m.group(1) == 'er' 
+        and tofloat(m.group(2)) is not None):
+        return ('er', tofloat(m.group(2)), 0)
+    if (m and m.group(1) == 'port'
+        and toint(m.group(2)) is not None):
+        return ('port', toint(m.group(2)))
+    m = re.search('^([a-zA-Z]+)([\d\.]+)_([\d\.]+)$', name)
+    if (m and m.group(1) == 'er'
+        and tofloat(m.group(2)) is not None
+        and tofloat(m.group(3)) is not None):
+        return ('er', tofloat(m.group(2)), tofloat(m.group(3)))
+    return ('er', 1, CONDUCTORS['pec'])
 
-    m = re.search('^([a-zA-Z]+)([\d\.].*)$', d[0])
-    if m: d = (m.group(1), m.group(2)) + d[1:]
-    tag = d[0]
-    afloat = tuple(tofloat(x) for x in d[1:])
-    aint = tuple(toint(x) for x in d[1:])
-    n = len(d)
-    if tag in CONDUCTOR and n == 1:
-        return ('er', 1, CONDUCTOR[tag])
-    elif tag == 'er' and n == 3 and None not in afloat:
-        return ('er', afloat[0], afloat[1])
-    elif tag == 'er' and n == 2 and None not in afloat:
-        return ('er', afloat[0], 0)
-    elif tag == 'sigma' and n == 2 and None not in afloat:
-        return ('er', 1, afloat[0])
-    elif tag == 'port' and n == 2 and None not in aint:
-        assert(aint[0] > 0)
-        return ('port', aint[0])
-    else:
-        return ('er', 1, CONDUCTOR['pec'])
-    
 
 # voxelize the scene
 
