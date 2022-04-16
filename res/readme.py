@@ -99,7 +99,7 @@ of 1, is: sigma99.99e9.
 To define both permittivity and conductivity the naming format is 
 er99.99e9_99.99e9, the underscore separating the two.
 
-## Ports
+## Lumped Ports
 
 To create a port, use a material name of port99 starting
 from port number 1.  The port will be a "lumped" port.  The opposite faces of the 
