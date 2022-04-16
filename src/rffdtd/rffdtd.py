@@ -231,7 +231,6 @@ def simulate(filename,
 
     # simulation payload
     payload = {
-        'time': time.time(),
         'ca': ca,
         'cb': cb,
         'ds': ds,
@@ -254,6 +253,7 @@ def simulate(filename,
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     # run simulations
+    start_time = time.time()
     nsim = stop - start
     size = torch.cuda.device_count()
     size = size if ngpu is None or ngpu > size else ngpu
@@ -276,7 +276,7 @@ def simulate(filename,
         sparam = simulate_batch(start, stop, device, payload)
 
     # show elapsed time
-    elapsed = time.time() - payload['time']
+    elapsed = time.time() - start_time
     print('\nFDTD simulation time: {:d} min {:.2f} sec'.format(
           int(elapsed / 60), elapsed % 60), file=sys.stderr)
 
