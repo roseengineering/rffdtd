@@ -29,14 +29,12 @@ print(f"""
 
 This repo provides a FDTD (Finite Difference Time Domain) simulator
 called rffdtd for solving RF circuits.  Rffdtd outputs its simulation 
-results as s-parameters in the touchstone file format.  
-It can run its simulations
-on a GPU, which other open source projects either do not support or
-if they do cannot generate s-parameters using a GPU.  
+results as s-parameters in the touchstone file format.  It can also run its simulations
+on one or more GPUs.  Other open source FDTD projects either do not support, or
+if they do, cannot generate s-parameters using a GPU.  
 
 The simulator is written in Python and requires the libraries numpy and
 pytorch in order to execute.
-
 
 The geometry and material information
 needed to run a FDTD simulation are provided through OFF geometry files.  The
