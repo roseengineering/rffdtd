@@ -21,7 +21,7 @@ needed to run a FDTD simulation are provided through OFF geometry files.  The
 contents of the OFF file constitute the physical structure of the model
 while the name of the OFF file identifies
 the material the geometry represents.  These OFF files can be zipped
-up into one or more ZIP files for your convenience.
+up into a ZIP file for your convenience.
 
 Rffdtd places your model inside a PEC cage, thereby surrounding the model within a PEC boundary.  The software does not
 support any type of absorbing boundaries, such as PMLs.  The
@@ -52,7 +52,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 3.21 sec
+FDTD simulation time: 0 min 2.59 sec
 # HZ S MA R 50
 5.0048e+09   3.13273e-01    48.73  3.58495e-01   147.36  0.00000e+00     0.00  0.00000e+00     0.00
 1.0010e+10   4.61764e-01  -114.52  3.15175e-01   -37.08  0.00000e+00     0.00  0.00000e+00     0.00

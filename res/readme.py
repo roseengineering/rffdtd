@@ -41,7 +41,7 @@ needed to run a FDTD simulation are provided through OFF geometry files.  The
 contents of the OFF file constitute the physical structure of the model
 while the name of the OFF file identifies
 the material the geometry represents.  These OFF files can be zipped
-up into one or more ZIP files for your convenience.
+up into a ZIP file for your convenience.
 
 Rffdtd places your model inside a PEC cage, thereby surrounding the model within a PEC boundary.  The software does not
 support any type of absorbing boundaries, such as PMLs.  The
