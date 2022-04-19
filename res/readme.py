@@ -9,6 +9,7 @@ def run(command, language='', nopython=False):
     buf = proc.stdout.read().decode()
     buf = re.sub(r'^.*( \d+ / \d+ / \d+.*)$', r'\g<1>', buf, flags=re.MULTILINE)
     buf = re.sub('\r', '', buf)
+    buf = re.sub('__main__.py', 'rffdtd', buf)
     proc.wait()
     return f"""
 ```{language}
@@ -26,23 +27,16 @@ print(f"""
 
 ## Overview
 
-This repo provides a FDTD (Finite Differences Time Domain) simulator
+This repo provides a FDTD (Finite Difference Time Domain) simulator
 called rffdtd for solving RF circuits.  Rffdtd outputs its simulation 
-results as s-parameters in the touchstone file format.  It is not limited in the number of
-s-parameter ports it can excite, so it can be used for example
-to "port tune" a multielement filter.  It can also run its simulations
+results as s-parameters in the touchstone file format.  
+It can run its simulations
 on a GPU, which other open source projects either do not support or
 if they do cannot generate s-parameters using a GPU.  
 
 The simulator is written in Python and requires the libraries numpy and
-pytorch in order to execute.  To install them use:
+pytorch in order to execute.
 
-```
-$ pip install numpy torch
-OR
-$ conda install -y -c pytorch pytorch
-$ conda install -y numpy
-```
 
 The geometry and material information
 needed to run a FDTD simulation are provided through OFF geometry files.  The
@@ -86,7 +80,8 @@ material is made out of silver, name it silver.off.  Rffdtd supports the followi
 material names: pec, silver, copper, gold, aluminum, brass, steel,
 and air.  Any material it does not know, rffdtd will consider it a
 PEC (Perfect Electrical Conductor).  If you have several OFF geometries
-made out of the same materal, you can prefix the material name with a group name and then a dash.
+made out of the same materal, you can prefix the material name with a group 
+name and then a dash.
 
 For example the interdigital filter uses the following OFF files and file names:
 
@@ -96,6 +91,7 @@ To support other materials, for example PCB substrates with a certain permittivi
 the following naming format for the material: er99.99e9.
 For conductors, the naming convention, assuming a permittivity
 of 1, is: sigma99.99e9.
+
 To define both permittivity and conductivity the naming format is 
 er99.99e9_99.99e9, the underscore separating the two.
 
@@ -136,8 +132,8 @@ This algorithm has the advantage that it will fill mesh geometries.
 Unfortunately it also has problems in that it might fill holes
 that it should not.  This is especially so with hollowed cubes.
 To rectify this, any geometry with holes needs to be broken up.
-For example an interdigital filter inside a hollowed cube as an
-enclosure needs to have a cover.  In addition this cover 
+For example an interdigital filter inside a hollowed cube enclosure must
+be broken into a box with a lid.  In addition this lid
 needs to be placed in a separate OFF file than the box.  See the
 provided interdigital filter for an example of this.
 
@@ -173,6 +169,11 @@ microwave coupler in the example directory.
 To build rffdtd, run the following then copy the resulting executable rffdtd to whichever directory you want.
 
 ```
+$ pip install numpy torch
+OR
+$ conda install -y -c pytorch pytorch
+$ conda install -y numpy
+
 $ sh build.sh
 python res/zip.py -s 1 -o rffdtd src/* src/*/*
 echo '#!/usr/bin/env python3' | cat - rffdtd.zip > rffdtd
@@ -180,7 +181,7 @@ rm rffdtd.zip
 chmod 755 rffdtd
 ```
 
-Or you can pip install it in this directory with:
+Or you can pip install it by entering the root directory of this repo and running:
 
 ```sh
 $ pip install .
