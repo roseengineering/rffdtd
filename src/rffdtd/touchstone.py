@@ -56,8 +56,19 @@ def read_touchstone(filename):
                 if ln[0] == '#':
                     d = ln[1:].lower().split()
                     dtype = d[2]
-                    assert(d[0] == 'hz' and d[1] == 's'
-                           and d[3] == 'r' and d[4] == '50'
+                    if d[0] == 'hz':
+                        scale = 1
+                    elif d[0] == 'khz':
+                        scale = 1e3
+                    elif d[0] == 'mhz':
+                        scale = 1e6
+                    elif d[0] == 'ghz':
+                        scale = 1e9
+                    else:
+                        raise ValueError
+                    assert(d[1] == 's'
+                           and d[3] == 'r' 
+                           and d[4] == '50'
                            and (dtype == 'db' or dtype == 'ma'))
                     continue
                 if ln[0] == ' ':
@@ -65,7 +76,7 @@ def read_touchstone(filename):
                     continue
             if buf:
                 d = [ float(d) for d in buf.split() ]
-                freq.append(d[0])
+                freq.append(d[0] * scale)
                 d = [ rect(d[i], d[i+1], dtype=dtype) for i in range(1, len(d), 2) ]
                 n = int(np.sqrt(len(d)))
                 d = np.array(d).reshape(n, n)
