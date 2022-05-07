@@ -35,10 +35,28 @@ def write_touchstone(freq, sparam, filename=None, zline=DEFAULT_ZLINE):
             fi.write(buf)
 
 
-def rect(ma, deg, dtype):
-    if dtype == 'db':
-        ma = 10**(ma / 20)
-    return ma * np.exp(1j * np.deg2rad(deg))
+def rect(x, y, dtype):
+    if dtype == 'db' or dtype =='ma':
+        x = 10**(x / 20) if dtype == 'db' else x
+        value = x * np.exp(1j * np.deg2rad(y))
+    elif dtype == 'ri':
+        value = x + 1j * y
+    else:
+        raise ValueError
+    return value
+
+
+def prefix(unit):
+    if unit == 'hz':
+        return 1
+    elif unit == 'khz':
+        return 1e3
+    elif unit == 'mhz':
+        return 1e6
+    elif unit == 'ghz':
+        return 1e9
+    else:
+        raise ValueError
 
 
 def read_touchstone(filename):
@@ -53,24 +71,15 @@ def read_touchstone(filename):
                 ln = ln.rstrip()
                 if not ln or ln[0] == '!':
                     continue
+                # handle header line
                 if ln[0] == '#':
                     d = ln[1:].lower().split()
-                    dtype = d[2]
-                    if d[0] == 'hz':
-                        scale = 1
-                    elif d[0] == 'khz':
-                        scale = 1e3
-                    elif d[0] == 'mhz':
-                        scale = 1e6
-                    elif d[0] == 'ghz':
-                        scale = 1e9
-                    else:
+                    if d[1] != 's' or d[3] != 'r' or d[4] != '50':
                         raise ValueError
-                    assert(d[1] == 's'
-                           and d[3] == 'r' 
-                           and d[4] == '50'
-                           and (dtype == 'db' or dtype == 'ma'))
+                    scale = prefix(d[0])
+                    dtype = d[2]
                     continue
+                # handle line continuation
                 if ln[0] == ' ':
                     buf += ln
                     continue
