@@ -2,37 +2,11 @@
 import os
 import pathlib
 import numpy as np
-from .conf import DEFAULT_ZLINE
 
 
-def write_touchstone(freq, sparam, filename=None, zline=DEFAULT_ZLINE):
-    nfreq = sparam.shape[0]
-    nport = sparam.shape[1]
-    ma = np.abs(sparam)
-    ph = np.angle(sparam, deg=True)
-    lines = []
-    lines.append('# HZ S MA R {:.0f}'.format(zline))
-    for i in range(nfreq):
-        buf = '{:<11.4e}'.format(freq[i])
-        for m in range(nport):
-            if m and nport > 2: buf += '\n{:11s}'.format('')
-            for n in range(nport):
-                ix = (i,n,m) if nport == 2 else (i,m,n)
-                buf += '  {:11.5e} {:8.2f}'.format(ma[ix], ph[ix])
-        lines.append(buf)
-    lines.append('')
-    buf = '\n'.join(lines)
-
-    # write out
-    if filename is None:
-        print(buf, end='')
-    else:
-        p = pathlib.Path(filename)
-        if not p.is_char_device():
-            basename = os.path.splitext(filename)[0]
-            filename = f'{basename}.s{nport}p'
-        with open(filename, "w") as fi:
-            fi.write(buf)
+def dbvolt(s):
+    with np.errstate(divide='ignore', invalid='ignore'):
+        return 20 * np.log10(abs(s))
 
 
 def rect(x, y, dtype):
@@ -42,7 +16,7 @@ def rect(x, y, dtype):
     elif dtype == 'ri':
         value = x + 1j * y
     else:
-        raise ValueError
+        raise ValueError("Bad touchstone file type")
     return value
 
 
@@ -74,7 +48,7 @@ def read_touchstone(filename):
                 # handle header line
                 if ln[0] == '#':
                     d = ln[1:].lower().split()
-                    if d[1] != 's' or d[3] != 'r' or d[4] != '50':
+                    if d[1] != 's' or d[3] != 'r' or float(d[4]) != 50:
                         raise ValueError
                     scale = prefix(d[0])
                     dtype = d[2]
@@ -95,5 +69,37 @@ def read_touchstone(filename):
     freq = np.array(freq)
     data = np.array(data)
     return freq, data
+
+
+def write_touchstone(freq, sparam, filename=None, zline=50):
+    nfreq = sparam.shape[0]
+    nport = sparam.shape[1]
+    db = dbvolt(sparam)
+    ph = np.angle(sparam, deg=True)
+    lines = []
+    lines.append(f'# MHZ S DB R {zline:.0f}')
+    # S11 S21 S12 S22
+    for i in range(nfreq):
+        buf = '{:<12.6f}'.format(freq[i] / 1e6)
+        for m in range(nport):
+            if m and nport > 2: buf += '\n{:11s}'.format('')
+            for n in range(nport):
+                ix = (i,n,m) if nport == 2 else (i,m,n)
+                buf += '  {:13.6g} {:9.3f}'.format(db[ix], ph[ix])
+        lines.append(buf)
+    lines.append('')
+    buf = '\n'.join(lines)
+
+    # write out
+    if filename is None:
+        print(buf, end='')
+    else:
+        p = pathlib.Path(filename)
+        if not p.is_char_device():
+            basename = os.path.splitext(filename)[0]
+            filename = f'{basename}.s{nport}p'
+        with open(filename, "w") as fi:
+            fi.write(buf)
+
 
 
