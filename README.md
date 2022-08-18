@@ -52,7 +52,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 2.87 sec
+FDTD simulation time: 0 min 2.59 sec
 # MHZ S DB R 50
 5004.778404        -10.0815    48.728       -8.91034   147.363           -inf     0.000           -inf     0.000
 10009.556808       -6.71159  -114.524        -10.029   -37.085           -inf     0.000           -inf     0.000
@@ -77,7 +77,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 3.68 sec
+FDTD simulation time: 0 min 3.31 sec
 # MHZ S DB R 50
 1997.137573        -2.70027    10.486       -9.86965     5.800       -69.2482   -97.873       -77.6622   -90.262       -45.1868   -75.791
                    -9.8896     4.956        -12.125     9.512       -29.0668   154.338       -77.6137    67.750       -77.9565    89.891
