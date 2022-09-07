@@ -79,14 +79,14 @@ def read_touchstone(filename):
     return freq, data
 
 
-def write_touchstone(freq, sparam, filename=None, zline=None):
-    zline = zline or 50
+def write_touchstone(freq, sparam, filename=None, zo=None):
+    zo = zo or 50
     nfreq = sparam.shape[0]
     nport = sparam.shape[1]
     db = dbvolt(sparam)
     ph = np.angle(sparam, deg=True)
     lines = []
-    lines.append(f'# MHZ S DB R {zline:.0f}')
+    lines.append(f'# MHZ S DB R {zo:.0f}')
     # S11 S21 S12 S22
     for i in range(nfreq):
         buf = '{:<17.16g}'.format(freq[i] / 1e6)

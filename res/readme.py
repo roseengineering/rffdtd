@@ -205,7 +205,7 @@ freq, sparam = rffdtd.simulate(
     ds=.001,        # length of a side of a uniform cell in m
     ntau=20,        # pulse width of excitation in units of simulation steps
     ndelay=6.5,     # time delay of excitation in units of pulse widths
-    zline=50,       # line impedance of ports in ohms
+    zo=50,          # line impedance of ports in ohms
     dtype='float',  # "float" or "double" data type'
     device=None     # "cuda" or "cpu" compute device, otherwise will autodetect
     steps=None,     # explicitly set number of simulation steps
@@ -232,7 +232,7 @@ rffdtd.write_touchstone(
     freq,          # list of frequencies corresponding to each s-parameter matrix
     sparam,        # list of s-parameter matrices
     filename=None  # name of file to write touchstone output to, instead of console
-    zline=50,      # line impedance of ports in ohms
+    zo=50,         # line impedance of ports in ohms
     )
 
 rffdtd.read_touchstone(

@@ -52,7 +52,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 2.60 sec
+FDTD simulation time: 0 min 2.87 sec
 # MHZ S DB R 50
 5004.778404097836       -10.0815      48.728       -8.91034      147.36           -inf           0           -inf           0
 10009.55680819567       -6.71159     -114.52        -10.029     -37.085           -inf           0           -inf           0
@@ -77,7 +77,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 3.33 sec
+FDTD simulation time: 0 min 3.68 sec
 # MHZ S DB R 50
 1997.137573007534       -2.70027      10.486       -9.86965      5.8005       -69.2482     -97.873       -77.6622     -90.262       -45.1868     -75.791
                          -9.8896      4.9562        -12.125      9.5121       -29.0668      154.34       -77.6137       67.75       -77.9565      89.891
@@ -121,8 +121,7 @@ Also see the examples.ipynb Jupyter notebook in the repo for plots and more.
 $ rffdtd --help
 usage: rffdtd [-h] [--output OUTPUT] [--export EXPORT] [--start START] [--stop STOP]
                    [--pitch PITCH] [--df DF] [--steps STEPS] [--ntau NTAU] [--ndelay NDELAY]
-                   [--zline ZLINE] [--ngpu NGPU] [--dtype DTYPE] [--device DEVICE]
-                   [--symmetric]
+                   [--zo ZO] [--ngpu NGPU] [--dtype DTYPE] [--device DEVICE] [--symmetric]
                    filename [filename ...]
 
 positional arguments:
@@ -139,7 +138,7 @@ optional arguments:
   --steps STEPS    explicitly set number of simulation steps (default: None)
   --ntau NTAU      pulse width of excitation in units of simulation steps (default: 20)
   --ndelay NDELAY  time delay of excitation in units of pulse widths (default: 6.5)
-  --zline ZLINE    line impedance of ports in ohms (default: 50)
+  --zo ZO          line impedance of ports in ohms (default: 50)
   --ngpu NGPU      number of GPUs to use, or all by default (default: None)
   --dtype DTYPE    "float" or "double" data type (default: float)
   --device DEVICE  "cuda" or "cpu" compute device, otherwise will autodetect (default: None)
@@ -304,7 +303,7 @@ freq, sparam = rffdtd.simulate(
     ds=.001,        # length of a side of a uniform cell in m
     ntau=20,        # pulse width of excitation in units of simulation steps
     ndelay=6.5,     # time delay of excitation in units of pulse widths
-    zline=50,       # line impedance of ports in ohms
+    zo=50,          # line impedance of ports in ohms
     dtype='float',  # "float" or "double" data type'
     device=None     # "cuda" or "cpu" compute device, otherwise will autodetect
     steps=None,     # explicitly set number of simulation steps
@@ -331,7 +330,7 @@ rffdtd.write_touchstone(
     freq,          # list of frequencies corresponding to each s-parameter matrix
     sparam,        # list of s-parameter matrices
     filename=None  # name of file to write touchstone output to, instead of console
-    zline=50,      # line impedance of ports in ohms
+    zo=50,         # line impedance of ports in ohms
     )
 
 rffdtd.read_touchstone(

@@ -28,7 +28,7 @@ def parse_args():
                         help='pulse width of excitation in units of simulation steps')
     parser.add_argument('--ndelay', type=float, default=DEFAULT_NDELAY, 
                         help='time delay of excitation in units of pulse widths')
-    parser.add_argument('--zline', type=float, default=DEFAULT_ZLINE, 
+    parser.add_argument('--zo', type=float, default=DEFAULT_ZLINE, 
                         help='line impedance of ports in ohms')
     parser.add_argument('--ngpu', type=int,
                         help='number of GPUs to use, or all by default')
@@ -50,10 +50,10 @@ def main():
     else: 
         freq, sparam = simulate(
             args.filename,
-            ds=ds, df=args.df, steps=args.steps, zline=args.zline, 
+            ds=ds, df=args.df, steps=args.steps, zo=args.zo, 
             start=args.start, stop=args.stop,
             ntau=args.ntau, ndelay=args.ndelay,
             ngpu=args.ngpu, symmetric=args.symmetric,
             dtype=args.dtype, device=args.device)
-        write_touchstone(freq, sparam, filename=args.output, zline=args.zline)
+        write_touchstone(freq, sparam, filename=args.output, zo=args.zo)
 

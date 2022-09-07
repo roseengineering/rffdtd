@@ -177,7 +177,7 @@ def simulate(filename,
              ds=DEFAULT_DS,
              ntau=DEFAULT_NTAU,
              ndelay=DEFAULT_NDELAY,
-             zline=DEFAULT_ZLINE,
+             zo=DEFAULT_ZLINE,
              dtype=DEFAULT_DTYPE,
              device=None,
              steps=None, 
@@ -199,7 +199,7 @@ def simulate(filename,
     # set port conductivities
     for ix in ports:
         area, nfields = cubemag(ix)
-        sigma[ix] = 1 / (area / nfields * zline * ds)
+        sigma[ix] = 1 / (area / nfields * zo * ds)
         er[ix] = 1
 
     # find memory needed
@@ -242,7 +242,7 @@ def simulate(filename,
         'cprobes_ix': cprobes_ix,
         'vprobes_ix': vprobes_ix,
         'ports': ports,
-        'zline': zline,
+        'zo': zo,
         'start': start,
         'stop': stop,
         'dtype': dtype
@@ -379,7 +379,7 @@ def simulate_fdtd(n, device, payload):
     cprobes_ix = payload['cprobes_ix']
     vprobes_ix = payload['vprobes_ix']
     ports = payload['ports']
-    zline = payload['zline']
+    zo = payload['zo']
     dtype = payload['dtype']
     steps = payload['steps']
     ntau = payload['ntau']
@@ -429,7 +429,7 @@ def simulate_fdtd(n, device, payload):
     # calculate s-parameters
     voltages = torch.fft.rfft(voltages)
     currents = torch.fft.rfft(currents)
-    a = 0.5 * (voltages + zline * currents) / np.sqrt(zline)
-    b = 0.5 * (voltages - zline * currents) / np.sqrt(zline)
+    a = 0.5 * (voltages + zo * currents) / np.sqrt(zo)
+    b = 0.5 * (voltages - zo * currents) / np.sqrt(zo)
     return (b / a[n]).T
 
