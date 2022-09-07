@@ -33,11 +33,18 @@ def prefix(unit):
         raise ValueError
 
 
+def get_fid(fileio):
+    if isinstance(fileio, str):
+        return open(fileio)
+    else:
+        return fileio
+
+
 def read_touchstone(filename):
     freq = []
     data = []
     dtype = None
-    with open(filename) as f:
+    with get_fid(filename) as f:
         buf = ''
         while True:
             ln = next(f, None)
@@ -48,8 +55,9 @@ def read_touchstone(filename):
                 # handle header line
                 if ln[0] == '#':
                     d = ln[1:].lower().split()
-                    if d[1] != 's' or d[3] != 'r' or float(d[4]) != 50:
+                    if d[1] != 's' or d[3] != 'r':
                         raise ValueError
+                    zo = float(d[4])
                     scale = prefix(d[0])
                     dtype = d[2]
                     continue
@@ -71,7 +79,8 @@ def read_touchstone(filename):
     return freq, data
 
 
-def write_touchstone(freq, sparam, filename=None, zline=50):
+def write_touchstone(freq, sparam, filename=None, zline=None):
+    zline = zline or 50
     nfreq = sparam.shape[0]
     nport = sparam.shape[1]
     db = dbvolt(sparam)
@@ -80,12 +89,12 @@ def write_touchstone(freq, sparam, filename=None, zline=50):
     lines.append(f'# MHZ S DB R {zline:.0f}')
     # S11 S21 S12 S22
     for i in range(nfreq):
-        buf = '{:<12.6f}'.format(freq[i] / 1e6)
+        buf = '{:<17.16g}'.format(freq[i] / 1e6)
         for m in range(nport):
-            if m and nport > 2: buf += '\n{:11s}'.format('')
+            if m and nport > 2: buf += '\n{:17s}'.format('')
             for n in range(nport):
                 ix = (i,n,m) if nport == 2 else (i,m,n)
-                buf += '  {:13.6g} {:9.3f}'.format(db[ix], ph[ix])
+                buf += '  {:13.6g} {:11.5g}'.format(db[ix], ph[ix])
         lines.append(buf)
     lines.append('')
     buf = '\n'.join(lines)
