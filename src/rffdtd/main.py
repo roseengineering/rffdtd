@@ -1,7 +1,7 @@
 
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
-from . import simulate, parseoff, writeobj, write_touchstone
+from . import simulate, parseoff, writeobj, save_touchstone
 from .conf import (DEFAULT_DS, DEFAULT_NTAU, DEFAULT_NDELAY, 
                   DEFAULT_ZLINE, DEFAULT_DTYPE)
 
@@ -11,7 +11,7 @@ def parse_args():
     parser.add_argument('filename', nargs='+',
                         help='OFF geometry file comprising the FDTD simulation, ZIP files accepted')
     parser.add_argument('--output',
-                        help='write touchstone output to a file, instead of console')
+                        help='save touchstone output to a file, use .npz extension to write npz files')
     parser.add_argument('--export',
                         help='save voxelization as an OBJ file, no simulation')
     parser.add_argument('--start', type=int,
@@ -55,5 +55,5 @@ def main():
             ntau=args.ntau, ndelay=args.ndelay,
             ngpu=args.ngpu, symmetric=args.symmetric,
             dtype=args.dtype, device=args.device)
-        write_touchstone(freq, sparam, filename=args.output, zo=args.zo)
+        save_touchstone(freq, sparam, zo=args.zo, filename=args.output)
 

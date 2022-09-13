@@ -228,15 +228,26 @@ allowable steps is set to 2 * ntau * ndelay.
 Load or save s-sparameters to a touchstone file:
 
 ```python
-rffdtd.write_touchstone(
-    freq,          # list of frequencies corresponding to each s-parameter matrix
-    sparam,        # list of s-parameter matrices
-    filename=None  # name of file to write touchstone output to, instead of console
-    zo=50,         # line impedance of ports in ohms
-    )
-
+rffdtd.save_touchstone(  # save to a touchstone file
+    f,              # list of frequencies corresponding to each s-parameter matrix
+    s,              # list of s-parameter matrices
+    zo=None,        # line impedance of ports in ohms (default 50)
+    dtype=None,     # type of formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
+    precision=None, # number of signficant digits to output (default 6)
+    filename=None   # name of file to write touchstone output to (default console)
+)
+text = rffdtd.write_touchstone(  # return a touchstone file as a string
+    f,              # list of frequencies corresponding to each s-parameter matrix
+    s,              # list of s-parameter matrices
+    zo=None,        # line impedance of ports in ohms (default 50)
+    dtype=None,     # type of formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
+    precision=None  # number of signficant digits to output (default 6)
+)
 rffdtd.read_touchstone(
-    filename       # name of file to load touchstone input from
+    text            # load a touchstone file which is residing in a string
+)
+rffdtd.load_touchstone(
+    filename        # name of file to load touchstone file from
     )
 ```
 

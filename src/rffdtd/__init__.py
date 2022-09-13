@@ -1,6 +1,6 @@
 
 from .rffdtd import simulate
-from .touchstone import read_touchstone, write_touchstone
+from .touchstone import read_touchstone, write_touchstone, load_touchstone, save_touchstone
 from .qucsstudio import read_dat
 from .version import __version__
 
