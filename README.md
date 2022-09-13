@@ -52,7 +52,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 2.50 sec
+FDTD simulation time: 0 min 2.81 sec
 # MHZ S RI R 50
 5004.778404097836      0.206647     0.235451     -0.301889     0.193343             0            0             0            0
 10009.55680819567     -0.191668    -0.420107      0.251429    -0.190049             0            0             0            0
@@ -77,7 +77,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 3.26 sec
+FDTD simulation time: 0 min 3.58 sec
 # MHZ S RI R 50
 1997.137573007534      0.720564     0.133363      0.319366    0.0324427   -4.7234e-05 -0.000341566  -5.98713e-07 -0.000130884    0.00135092  -0.00533538
                        0.319075    0.0276699      0.244195    0.0409174    -0.0317367    0.0152482   4.98366e-05  0.000121818   2.40757e-07  0.000126525
@@ -342,12 +342,12 @@ text = rffdtd.write_touchstone(  # return a touchstone file as a string
     dtype=None,     # type of formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
     precision=None  # number of signficant digits to output (default 6)
 )
-rffdtd.read_touchstone(
+f, s = rffdtd.read_touchstone(
     text            # load a touchstone file which is residing in a string
 )
-rffdtd.load_touchstone(
+f, s = rffdtd.load_touchstone(
     filename        # name of file to load touchstone file from
-    )
+)
 ```
 
 ## util/snpsum.py

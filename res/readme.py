@@ -243,12 +243,12 @@ text = rffdtd.write_touchstone(  # return a touchstone file as a string
     dtype=None,     # type of formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
     precision=None  # number of signficant digits to output (default 6)
 )
-rffdtd.read_touchstone(
+f, s = rffdtd.read_touchstone(
     text            # load a touchstone file which is residing in a string
 )
-rffdtd.load_touchstone(
+f, s = rffdtd.load_touchstone(
     filename        # name of file to load touchstone file from
-    )
+)
 ```
 
 ## util/snpsum.py
