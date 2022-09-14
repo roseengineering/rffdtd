@@ -113,14 +113,15 @@ def save_touchstone(f, s, dtype=None, zo=None, filename=None, precision=None):
     if filename is None:
         print(text, end='')
     else:
-        basename, ext = os.path.splitext(filename)
+        ext = os.path.splitext(filename)[1]
         if (ext == '.npz'):
             np.savez(filename, f=f, s=s)
         else:
             p = pathlib.Path(filename)
             if not p.is_char_device():
                 nport = s.shape[1]
-                filename = f'{basename}.s{nport}p'
+                if ext != '.s{nport}p':
+                    filename = f'{filename}.s{nport}p'
             with open(filename, "w") as fi:
                 fi.write(text)
 
@@ -131,7 +132,7 @@ def load_touchstone(fileio):
     elif not isinstance(fileio, str):
         text = fileio.read()
     else:
-        basename, ext = os.path.splitext(fileio)
+        ext = os.path.splitext(fileio)[1]
         if (ext == '.npz'):
             data = np.load(fileio)
             f = data['f']
