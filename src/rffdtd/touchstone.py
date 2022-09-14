@@ -120,7 +120,7 @@ def save_touchstone(f, s, dtype=None, zo=None, filename=None, precision=None):
             p = pathlib.Path(filename)
             if not p.is_char_device():
                 nport = s.shape[1]
-                if ext != '.s{nport}p':
+                if ext != f'.s{nport}p':
                     filename = f'{filename}.s{nport}p'
             with open(filename, "w") as fi:
                 fi.write(text)
