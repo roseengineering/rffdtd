@@ -125,16 +125,20 @@ def save_touchstone(f, s, dtype=None, zo=None, filename=None, precision=None):
                 fi.write(text)
 
 
-def get_fid(fileio):
-    if isinstance(fileio, str):
-        return open(fileio)
+def load_touchstone(fileio):
+    if fileio is None:
+        text = sys.read().decode()
+    elif not isinstance(fileio, str):
+        text = fileio.read()
     else:
-        return fileio
-
-
-def load_touchstone(filename):
-    with get_fid(filename) as f:
-        text = f.read()
+        basename, ext = os.path.splitext(fileio)
+        if (ext == '.npz'):
+            data = np.load(fileio)
+            f = data['f']
+            s = data['s']
+            return f, s
+        with open(fileio) as f:
+            text = f.read()
     return read_touchstone(text)
 
 
