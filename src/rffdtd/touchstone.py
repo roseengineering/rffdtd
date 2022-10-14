@@ -36,6 +36,7 @@ def prefix(unit):
 def read_touchstone(text):
     freq = []
     data = []
+    zo = 50
     dtype = None
     buf = ''
     f = iter(text.splitlines())
@@ -69,7 +70,7 @@ def read_touchstone(text):
         buf = ln
     freq = np.array(freq)
     data = np.array(data)
-    return freq, data
+    return freq, data, zo
 
 
 def write_touchstone(f, s, dtype=None, zo=None, precision=None):
@@ -87,7 +88,7 @@ def write_touchstone(f, s, dtype=None, zo=None, precision=None):
     lines.append(f'# MHZ S {dtype.upper()} R {zo:.0f}')
     # S11 S21 S12 S22
     for i in range(nfreq):
-        buf = '{:<17.16g}'.format(f[i] / 1e6)
+        buf = '{:<16.15g}'.format(f[i] / 1e6)
         for m in range(nport):
             if m and nport > 2: buf += '\n{:17s}'.format('')
             for n in range(nport):
@@ -115,7 +116,8 @@ def save_touchstone(f, s, dtype=None, zo=None, filename=None, precision=None):
     else:
         ext = os.path.splitext(filename)[1]
         if (ext == '.npz'):
-            np.savez(filename, f=f, s=s)
+            z = zo or 50
+            np.savez(filename, f=f, s=s, z=z)
         else:
             p = pathlib.Path(filename)
             if not p.is_char_device():
@@ -137,7 +139,8 @@ def load_touchstone(fileio):
             data = np.load(fileio)
             f = data['f']
             s = data['s']
-            return f, s
+            z = data['z'] if 'z' in data else 50
+            return f, s, z
         with open(fileio) as f:
             text = f.read()
     return read_touchstone(text)
