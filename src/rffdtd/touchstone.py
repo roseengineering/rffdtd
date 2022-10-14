@@ -90,7 +90,7 @@ def write_touchstone(f, s, dtype=None, zo=None, precision=None):
     for i in range(nfreq):
         buf = '{:<16.15g}'.format(f[i] / 1e6)
         for m in range(nport):
-            if m and nport > 2: buf += '\n{:17s}'.format('')
+            if m and nport > 2: buf += '\n{:16s}'.format('')
             for n in range(nport):
                 ix = (i,n,m) if nport == 2 else (i,m,n)
                 fm = '  {{:{c}.{d}g}} {{:{c}.{d}g}}'.format(c=pad, d=precision)

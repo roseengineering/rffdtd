@@ -225,16 +225,12 @@ length of the excitation pulse width.  The frequency step used
 is determined by the number of simulation steps.  The minimum number of
 allowable steps is set to 2 * ntau * ndelay.
 
-Load or save s-sparameters to a touchstone file:
+Read s-parameters from a string in touchstone format, or
+return s-parameters as a string using the touchstone format.
 
 ```python
-rffdtd.save_touchstone(  # save to a touchstone file
-    f,              # list of frequencies corresponding to each s-parameter matrix
-    s,              # list of s-parameter matrices
-    zo=None,        # line impedance of ports in ohms (default 50)
-    dtype=None,     # type of formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
-    precision=None, # number of signficant digits to output (default 6)
-    filename=None   # name of file to write touchstone output to (default console)
+f, s = rffdtd.read_touchstone(
+    text            # load a touchstone file which is residing in a string
 )
 text = rffdtd.write_touchstone(  # return a touchstone file as a string
     f,              # list of frequencies corresponding to each s-parameter matrix
@@ -243,13 +239,27 @@ text = rffdtd.write_touchstone(  # return a touchstone file as a string
     dtype=None,     # type of formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
     precision=None  # number of signficant digits to output (default 6)
 )
-f, s = rffdtd.read_touchstone(
-    text            # load a touchstone file which is residing in a string
-)
+```
+
+Load s-parameters from a text file in touchstone format or a .npz file; or 
+write s-parameters to a text file using touchstone format or a .npz file.
+The .npz file, if used, saves the frequencies, s-parameters, and normalized impedances
+into npz file attributes 'f', 's', and 'z' respectively.
+
+```python
 f, s = rffdtd.load_touchstone(
-    filename        # name of file to load touchstone file from
+    filename        # name of text file or .npz file to load
+)
+rffdtd.save_touchstone(  # save to a touchstone file
+    f,              # list of frequencies corresponding to each s-parameter matrix
+    s,              # list of s-parameter matrices
+    zo=None,        # line impedance of ports in ohms (default 50)
+    dtype=None,     # type of formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
+    precision=None, # number of signficant digits to output (default 6)
+    filename=None   # name of text file (by default console) or .nzp file to write s-sparameters to
 )
 ```
+  --output OUTPUT  save touchstone output to a file, use .npz extension to write npz files
 
 ## util/snpsum.py
 
