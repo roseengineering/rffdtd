@@ -52,7 +52,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 2.52 sec
+FDTD simulation time: 0 min 3.56 sec
 # MHZ S RI R 50
 5004.77840409784      0.206647     0.235451     -0.301889     0.193343             0            0             0            0
 10009.5568081957     -0.191668    -0.420107      0.251429    -0.190049             0            0             0            0
@@ -77,7 +77,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 3.17 sec
+FDTD simulation time: 0 min 3.65 sec
 # MHZ S RI R 50
 1997.13757300753      0.720564     0.133363      0.319366    0.0324427   -4.7234e-05 -0.000341566  -5.98713e-07 -0.000130884    0.00135092  -0.00533538
                       0.319075    0.0276699      0.244195    0.0409174    -0.0317367    0.0152482   4.98366e-05  0.000121818   2.40757e-07  0.000126525
@@ -129,8 +129,9 @@ positional arguments:
 
 optional arguments:
   -h, --help       show this help message and exit
-  --output OUTPUT  save touchstone output to a file, use .npz extension to write npz files
-                   (default: None)
+  --output OUTPUT  save the s-parameter result to the given file. Files ending with .npz will
+                   be saved as .npz files, otherwise they will be saved as touchstone files.
+                   The default is to send the output to the console. (default: None)
   --export EXPORT  save voxelization as an OBJ file, no simulation (default: None)
   --start START    first port to excite, starting from 1 (default: None)
   --stop STOP      last port to excite, starting from 1 (default: None)
@@ -324,8 +325,9 @@ length of the excitation pulse width.  The frequency step used
 is determined by the number of simulation steps.  The minimum number of
 allowable steps is set to 2 * ntau * ndelay.
 
-Read s-parameters from a string in touchstone format, or
-return s-parameters as a string using the touchstone format.
+To read s-parameters from a string in touchstone format, or to
+return s-parameters as a string using the touchstone format, 
+use:
 
 ```python
 f, s = rffdtd.read_touchstone(
@@ -340,10 +342,8 @@ text = rffdtd.write_touchstone(  # return a touchstone file as a string
 )
 ```
 
-Load s-parameters from a text file in touchstone format or a .npz file; or 
-write s-parameters to a text file using touchstone format or a .npz file.
-The .npz file, if used, saves the frequencies, s-parameters, and normalized impedances
-into npz file attributes 'f', 's', and 'z' respectively.
+To load s-parameters from a text file in the touchstone format or from a .npz file; or to write s-parameters to a text file using touchstone format or a .npz file, use:
+
 
 ```python
 f, s = rffdtd.load_touchstone(
@@ -358,7 +358,12 @@ rffdtd.save_touchstone(  # save to a touchstone file
     filename=None   # name of text file (by default console) or .nzp file to write s-sparameters to
 )
 ```
-  --output OUTPUT  save touchstone output to a file, use .npz extension to write npz files
+
+## S-Parameter Output In .npz files
+
+If s-sparameters are saved to a .npz file, the frequencies, 
+s-parameters, and normalized impedance are stored
+as the attributes 'f', 's', and 'z' respectively.
 
 ## util/snpsum.py
 

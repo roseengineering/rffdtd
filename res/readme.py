@@ -225,8 +225,9 @@ length of the excitation pulse width.  The frequency step used
 is determined by the number of simulation steps.  The minimum number of
 allowable steps is set to 2 * ntau * ndelay.
 
-Read s-parameters from a string in touchstone format, or
-return s-parameters as a string using the touchstone format.
+To read s-parameters from a string in touchstone format, or to
+return s-parameters as a string using the touchstone format, 
+use:
 
 ```python
 f, s = rffdtd.read_touchstone(
@@ -241,10 +242,8 @@ text = rffdtd.write_touchstone(  # return a touchstone file as a string
 )
 ```
 
-Load s-parameters from a text file in touchstone format or a .npz file; or 
-write s-parameters to a text file using touchstone format or a .npz file.
-The .npz file, if used, saves the frequencies, s-parameters, and normalized impedances
-into npz file attributes 'f', 's', and 'z' respectively.
+To load s-parameters from a text file in the touchstone format or from a .npz file; or to write s-parameters to a text file using touchstone format or a .npz file, use:
+
 
 ```python
 f, s = rffdtd.load_touchstone(
@@ -259,7 +258,12 @@ rffdtd.save_touchstone(  # save to a touchstone file
     filename=None   # name of text file (by default console) or .nzp file to write s-sparameters to
 )
 ```
-  --output OUTPUT  save touchstone output to a file, use .npz extension to write npz files
+
+## S-Parameter Output In .npz files
+
+If s-sparameters are saved to a .npz file, the frequencies, 
+s-parameters, and normalized impedance are stored
+as the attributes 'f', 's', and 'z' respectively.
 
 ## util/snpsum.py
 

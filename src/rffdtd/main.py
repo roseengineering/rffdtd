@@ -11,7 +11,7 @@ def parse_args():
     parser.add_argument('filename', nargs='+',
                         help='OFF geometry file comprising the FDTD simulation, ZIP files accepted')
     parser.add_argument('--output',
-                        help='save touchstone output to a file, use .npz extension to write npz files')
+                        help='save the s-parameter result to the given file.  Files ending with .npz will be saved as .npz files, otherwise they will be saved as touchstone files.  The default is to send the output to the console.')
     parser.add_argument('--export',
                         help='save voxelization as an OBJ file, no simulation')
     parser.add_argument('--start', type=int,
