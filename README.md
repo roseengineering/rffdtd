@@ -52,7 +52,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 3.56 sec
+FDTD simulation time: 0 min 3.11 sec
 # MHZ S RI R 50
 5004.77840409784      0.206647     0.235451     -0.301889     0.193343             0            0             0            0
 10009.5568081957     -0.191668    -0.420107      0.251429    -0.190049             0            0             0            0
@@ -77,7 +77,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 3.65 sec
+FDTD simulation time: 0 min 3.93 sec
 # MHZ S RI R 50
 1997.13757300753      0.720564     0.133363      0.319366    0.0324427   -4.7234e-05 -0.000341566  -5.98713e-07 -0.000130884    0.00135092  -0.00533538
                       0.319075    0.0276699      0.244195    0.0409174    -0.0317367    0.0152482   4.98366e-05  0.000121818   2.40757e-07  0.000126525
@@ -229,11 +229,12 @@ The simulator performs the voxelization using a "z-buffer" algorithm.
 This algorithm has the advantage that it will fill mesh geometries.
 Unfortunately it also has problems in that it might fill holes
 that it should not.  This is especially so with hollowed cubes.
-To rectify this, any geometry with holes needs to be broken up.
-For example an interdigital filter inside a hollowed cube enclosure must
-be broken into a box with a lid.  In addition this lid
-needs to be placed in a separate OFF file than the box.  See the
-provided interdigital filter for an example of this.
+To rectify this, any geometry with holes needs to be broken up
+to be visible by the voxelizer.
+For example with an interdigital filter inside an enclosure,
+the enclosure itself must be broken up into a box with a lid, 
+each in a separate OFF file, otherwise you get a solid cube. 
+See the provided interdigital filter for an example of this.
 
 To inspect how well the model is voxelized, use the --export option.
 This will output the voxel result as an OBJ file and skip the simulation.

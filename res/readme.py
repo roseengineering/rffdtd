@@ -129,11 +129,12 @@ The simulator performs the voxelization using a "z-buffer" algorithm.
 This algorithm has the advantage that it will fill mesh geometries.
 Unfortunately it also has problems in that it might fill holes
 that it should not.  This is especially so with hollowed cubes.
-To rectify this, any geometry with holes needs to be broken up.
-For example an interdigital filter inside a hollowed cube enclosure must
-be broken into a box with a lid.  In addition this lid
-needs to be placed in a separate OFF file than the box.  See the
-provided interdigital filter for an example of this.
+To rectify this, any geometry with holes needs to be broken up
+to be visible by the voxelizer.
+For example with an interdigital filter inside an enclosure,
+the enclosure itself must be broken up into a box with a lid, 
+each in a separate OFF file, otherwise you get a solid cube. 
+See the provided interdigital filter for an example of this.
 
 To inspect how well the model is voxelized, use the --export option.
 This will output the voxel result as an OBJ file and skip the simulation.
