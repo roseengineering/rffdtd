@@ -9,12 +9,12 @@
 # and summed up into one sparameter matrix using this utility.
 
 import numpy as np
-from rffdtd import read_touchstone, write_touchstone
+from rffdtd import load_touchstone, save_touchstone
 
 def main(*filename):
     freq = None
     for fn in filename:
-        f, s = read_touchstone(fn)
+        f, s = load_touchstone(fn)
         if freq is None:
             freq = f
             sparam = s 
@@ -23,7 +23,7 @@ def main(*filename):
             assert(s.shape == sparam.shape)
             sparam += s
     if freq is not None:
-        write_touchstone(freq, sparam)
+        save_touchstone(freq, sparam)
 
 
 if __name__ == "__main__":
