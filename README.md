@@ -38,6 +38,13 @@ The --df option sets the frequency step you want the s-parameter results to prov
 --pitch option sets the length of a side of a FDTD grid cell in millimeters to use.
 The --stop option tells rffdtd which port it should excite last.
 
+The maximum frequency returned is determined by the 
+width in seconds (--ntau) of the excitation pulse.  While the frequency step used
+is determined by the number of simulation steps (--steps).  The minimum number of
+allowable simulation steps is set at 2 * ntau * ndelay.  Lastly the time period
+of each simulation step is set by cell size (--pitch), which affects the 
+maximum frequency since --ntau is given in units of simulation steps.
+
 
 ```
 $ rffdtd --df 5e9 --stop 1 --pitch .264 examples/lowpass.zip
@@ -52,7 +59,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 3.11 sec
+FDTD simulation time: 0 min 2.86 sec
 # MHZ S RI R 50
 5004.77840409784      0.206647     0.235451     -0.301889     0.193343             0            0             0            0
 10009.5568081957     -0.191668    -0.420107      0.251429    -0.190049             0            0             0            0
@@ -77,7 +84,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 3.93 sec
+FDTD simulation time: 0 min 3.56 sec
 # MHZ S RI R 50
 1997.13757300753      0.720564     0.133363      0.319366    0.0324427   -4.7234e-05 -0.000341566  -5.98713e-07 -0.000130884    0.00135092  -0.00533538
                       0.319075    0.0276699      0.244195    0.0409174    -0.0317367    0.0152482   4.98366e-05  0.000121818   2.40757e-07  0.000126525
@@ -321,10 +328,6 @@ Where freq is a list of frequencies and sparam is a list of
 complex-number s-parameter matrices.  Each frequency in freq 
 corresponds to its respective s-parameter matrix in sparam.
 The numpy array sparam has the shape (nfreq, m, n).
-The maximum frequency returned in freq is determined by the 
-length of the excitation pulse width.  The frequency step used
-is determined by the number of simulation steps.  The minimum number of
-allowable steps is set to 2 * ntau * ndelay.
 
 To read s-parameters from a string in touchstone format, or to
 return s-parameters as a string using the touchstone format, 
@@ -343,7 +346,7 @@ text = rffdtd.write_touchstone(  # return a touchstone file as a string
 )
 ```
 
-To load s-parameters from a text file in the touchstone format or from a .npz file; or to write s-parameters to a text file using touchstone format or a .npz file, use:
+To load s-parameters from a text file in the touchstone format or from a .npz file, or to write s-parameters to a text file using touchstone format or a .npz file, use:
 
 
 ```python

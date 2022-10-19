@@ -58,6 +58,13 @@ The --df option sets the frequency step you want the s-parameter results to prov
 --pitch option sets the length of a side of a FDTD grid cell in millimeters to use.
 The --stop option tells rffdtd which port it should excite last.
 
+The maximum frequency returned is determined by the 
+width in seconds (--ntau) of the excitation pulse.  While the frequency step used
+is determined by the number of simulation steps (--steps).  The minimum number of
+allowable simulation steps is set at 2 * ntau * ndelay.  Lastly the time period
+of each simulation step is set by cell size (--pitch), which affects the 
+maximum frequency since --ntau is given in units of simulation steps.
+
 {run("src/__main__.py --df 5e9 --stop 1 --pitch .264 examples/lowpass.zip")}
 
 To simulate a 1296 MHz interdigital filter [2], run:
@@ -221,10 +228,6 @@ Where freq is a list of frequencies and sparam is a list of
 complex-number s-parameter matrices.  Each frequency in freq 
 corresponds to its respective s-parameter matrix in sparam.
 The numpy array sparam has the shape (nfreq, m, n).
-The maximum frequency returned in freq is determined by the 
-length of the excitation pulse width.  The frequency step used
-is determined by the number of simulation steps.  The minimum number of
-allowable steps is set to 2 * ntau * ndelay.
 
 To read s-parameters from a string in touchstone format, or to
 return s-parameters as a string using the touchstone format, 
@@ -243,7 +246,7 @@ text = rffdtd.write_touchstone(  # return a touchstone file as a string
 )
 ```
 
-To load s-parameters from a text file in the touchstone format or from a .npz file; or to write s-parameters to a text file using touchstone format or a .npz file, use:
+To load s-parameters from a text file in the touchstone format or from a .npz file, or to write s-parameters to a text file using touchstone format or a .npz file, use:
 
 
 ```python
