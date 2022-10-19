@@ -52,7 +52,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 2.84 sec
+FDTD simulation time: 0 min 2.30 sec
 # MHZ S RI R 50
 5004.77840409784      0.206647     0.235451     -0.301889     0.193343             0            0             0            0
 10009.5568081957     -0.191668    -0.420107      0.251429    -0.190049             0            0             0            0
@@ -77,7 +77,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 3.59 sec
+FDTD simulation time: 0 min 3.10 sec
 # MHZ S RI R 50
 1997.13757300753      0.720564     0.133363      0.319366    0.0324427   -4.7234e-05 -0.000341566  -5.98713e-07 -0.000130884    0.00135092  -0.00533538
                       0.319075    0.0276699      0.244195    0.0409174    -0.0317367    0.0152482   4.98366e-05  0.000121818   2.40757e-07  0.000126525
@@ -147,19 +147,17 @@ optional arguments:
 ```
 
 
-The value passed to --df not only determines the frequency step in Hz but it also, in
-the process, determines the number of simulation steps.
+The value passed to --df not only determines the frequency step in Hz but it also,
+in combination with --pitch, determines the number of simulation steps.
 If you want to manually set the number of simulation steps use --steps instead of --df.
-Setting the number of simulation steps will determine the frequency step in Hz.
+This, again in combination with --pitch, will determine the frequency step in Hz.
 The minimum number of allowable simulation steps is set at 2 * --ntau * --ndelay.
-If neither --step or --df is set then the simulation will use the minimum number of steps.
+If both --step and --df are not set then the simulation will use the minimum number of steps.
 
 The maximum frequency returned is determined by the time
 width in seconds of the excitation pulse.  This width is determined
-by --ntau which is in simulation step units and by --pitch
-which determines the time in seconds of a simulation step.
-
-The period of each simulation step is calculated from the uniform cell size (--pitch)
+by --ntau which is in simulation step units.
+The period in seconds of each simulation step is calculated from the uniform cell size (--pitch)
 of the simulation.
 
 ## Materials
