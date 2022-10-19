@@ -72,8 +72,7 @@ Also see the examples.ipynb Jupyter notebook in the repo for plots and more.
 
 The value passed to --df not only determines the frequency step in Hz but it also,
 in combination with --pitch, determines the number of simulation steps.
-If you want to manually set the number of simulation steps use --steps instead of --df.
-This, again in combination with --pitch, will determine the frequency step in Hz.
+If you want to force the number of simulation steps use --steps instead of --df.
 The minimum number of allowable simulation steps is set at 2 * --ntau * --ndelay.
 If both --step and --df are not set then the simulation will use the minimum number of steps.
 
