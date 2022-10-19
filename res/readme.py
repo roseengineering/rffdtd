@@ -58,13 +58,6 @@ The --df option sets the frequency step you want the s-parameter results to prov
 --pitch option sets the length of a side of a FDTD grid cell in millimeters to use.
 The --stop option tells rffdtd which port it should excite last.
 
-The maximum frequency returned is determined by the 
-width in seconds (--ntau) of the excitation pulse.  While the frequency step used
-is determined by the number of simulation steps (--steps).  The minimum number of
-allowable simulation steps is set at 2 * ntau * ndelay.  Lastly the time period
-of each simulation step is set by cell size (--pitch), which affects the 
-maximum frequency since --ntau is given in units of simulation steps.
-
 {run("src/__main__.py --df 5e9 --stop 1 --pitch .264 examples/lowpass.zip")}
 
 To simulate a 1296 MHz interdigital filter [2], run:
@@ -76,6 +69,21 @@ Also see the examples.ipynb Jupyter notebook in the repo for plots and more.
 ## Usage
 
 {run("src/__main__.py --help")}
+
+The value passed to --df not only determines the frequency step in Hz but it also, in
+the process, determines the number of simulation steps.
+If you want to manually set the number of simulation steps use --steps instead of --df.
+Setting the number of simulation steps will determine the frequency step in Hz.
+The minimum number of allowable simulation steps is set at 2 * --ntau * --ndelay.
+If neither --step or --df is set then the simulation will use the minimum number of steps.
+
+The maximum frequency returned is determined by the time
+width in seconds of the excitation pulse.  This width is determined
+by --ntau which is in simulation step units and by --pitch
+which determines the time in seconds of a simulation step.
+
+The period of each simulation step is calculated from the uniform cell size (--pitch)
+of the simulation.
 
 ## Materials
 
