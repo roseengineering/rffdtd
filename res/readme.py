@@ -224,7 +224,6 @@ freq, sparam = rffdtd.simulate(
     steps=None,     # explicitly set number of simulation steps
     start=None,     # first port to excite, starting from 1
     stop=None,      # last port to excite, starting from 1
-    ngpu=None,      # number of GPUs to use, or all by default
     symmetric=False # make s-parameter matrices symmetric
     )
 ```
@@ -243,10 +242,10 @@ f, s = rffdtd.read_touchstone(
     text            # load a touchstone file which is residing in a string
 )
 text = rffdtd.write_touchstone(  # return a touchstone file as a string
-    f,              # list of frequencies corresponding to each s-parameter matrix
+    f,              # frequencies corresponding to each s-parameter matrix
     s,              # list of s-parameter matrices
+    dtype=None,     # formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
     zo=None,        # line impedance of ports in ohms (default 50)
-    dtype=None,     # type of formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
     precision=None  # number of signficant digits to output (default 6)
 )
 ```
@@ -259,12 +258,12 @@ f, s = rffdtd.load_touchstone(
     filename        # name of text file or .npz file to load
 )
 rffdtd.save_touchstone(  # save to a touchstone file
-    f,              # list of frequencies corresponding to each s-parameter matrix
+    f,              # frequencies corresponding to each s-parameter matrix
     s,              # list of s-parameter matrices
+    dtype=None,     # formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
     zo=None,        # line impedance of ports in ohms (default 50)
-    dtype=None,     # type of formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
     precision=None, # number of signficant digits to output (default 6)
-    filename=None   # name of text file (by default console) or .nzp file to write s-sparameters to
+    filename=None   # name of text file (by default console) or .nzp file 
 )
 ```
 

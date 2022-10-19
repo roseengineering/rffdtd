@@ -52,7 +52,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 2.32 sec
+FDTD simulation time: 0 min 2.47 sec
 # MHZ S RI R 50
 5004.77840409784      0.206647     0.235451     -0.301889     0.193343             0            0             0            0
 10009.5568081957     -0.191668    -0.420107      0.251429    -0.190049             0            0             0            0
@@ -77,7 +77,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 3.02 sec
+FDTD simulation time: 0 min 3.08 sec
 # MHZ S RI R 50
 1997.13757300753      0.720564     0.133363      0.319366    0.0324427   -4.7234e-05 -0.000341566  -5.98713e-07 -0.000130884    0.00135092  -0.00533538
                       0.319075    0.0276699      0.244195    0.0409174    -0.0317367    0.0152482   4.98366e-05  0.000121818   2.40757e-07  0.000126525
@@ -323,7 +323,6 @@ freq, sparam = rffdtd.simulate(
     steps=None,     # explicitly set number of simulation steps
     start=None,     # first port to excite, starting from 1
     stop=None,      # last port to excite, starting from 1
-    ngpu=None,      # number of GPUs to use, or all by default
     symmetric=False # make s-parameter matrices symmetric
     )
 ```
@@ -342,10 +341,10 @@ f, s = rffdtd.read_touchstone(
     text            # load a touchstone file which is residing in a string
 )
 text = rffdtd.write_touchstone(  # return a touchstone file as a string
-    f,              # list of frequencies corresponding to each s-parameter matrix
+    f,              # frequencies corresponding to each s-parameter matrix
     s,              # list of s-parameter matrices
+    dtype=None,     # formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
     zo=None,        # line impedance of ports in ohms (default 50)
-    dtype=None,     # type of formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
     precision=None  # number of signficant digits to output (default 6)
 )
 ```
@@ -358,12 +357,12 @@ f, s = rffdtd.load_touchstone(
     filename        # name of text file or .npz file to load
 )
 rffdtd.save_touchstone(  # save to a touchstone file
-    f,              # list of frequencies corresponding to each s-parameter matrix
+    f,              # frequencies corresponding to each s-parameter matrix
     s,              # list of s-parameter matrices
+    dtype=None,     # formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
     zo=None,        # line impedance of ports in ohms (default 50)
-    dtype=None,     # type of formatting, whether 'RI', 'MA' or 'DB' (default 'RI')
     precision=None, # number of signficant digits to output (default 6)
-    filename=None   # name of text file (by default console) or .nzp file to write s-sparameters to
+    filename=None   # name of text file (by default console) or .nzp file 
 )
 ```
 

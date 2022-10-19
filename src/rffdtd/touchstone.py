@@ -109,7 +109,7 @@ def write_touchstone(f, s, dtype=None, zo=None, precision=None):
 
 #######
 
-def save_touchstone(f, s, dtype=None, zo=None, filename=None, precision=None):
+def save_touchstone(f, s, dtype=None, zo=None, precision=None, filename=None):
     text = write_touchstone(f, s, zo=zo, dtype=dtype, precision=precision)
     if filename is None:
         print(text, end='')
