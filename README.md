@@ -59,7 +59,7 @@ Each individual simulation needs about 17.939 MiB of memory.
 Running 1 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  393 / 393 / 1   
-FDTD simulation time: 0 min 2.86 sec
+FDTD simulation time: 0 min 2.72 sec
 # MHZ S RI R 50
 5004.77840409784      0.206647     0.235451     -0.301889     0.193343             0            0             0            0
 10009.5568081957     -0.191668    -0.420107      0.251429    -0.190049             0            0             0            0
@@ -84,7 +84,7 @@ Each individual simulation needs about 10.764 MiB of memory.
 Running 5 simulation(s) on device cuda.
 Using GPU: NVIDIA GeForce RTX 3070 Ti
  260 / 260 / 5   
-FDTD simulation time: 0 min 3.56 sec
+FDTD simulation time: 0 min 3.58 sec
 # MHZ S RI R 50
 1997.13757300753      0.720564     0.133363      0.319366    0.0324427   -4.7234e-05 -0.000341566  -5.98713e-07 -0.000130884    0.00135092  -0.00533538
                       0.319075    0.0276699      0.244195    0.0409174    -0.0317367    0.0152482   4.98366e-05  0.000121818   2.40757e-07  0.000126525
@@ -128,7 +128,7 @@ Also see the examples.ipynb Jupyter notebook in the repo for plots and more.
 $ rffdtd --help
 usage: rffdtd [-h] [--output OUTPUT] [--export EXPORT] [--start START] [--stop STOP]
                    [--pitch PITCH] [--df DF] [--steps STEPS] [--ntau NTAU] [--ndelay NDELAY]
-                   [--zo ZO] [--ngpu NGPU] [--dtype DTYPE] [--device DEVICE] [--symmetric]
+                   [--zo ZO] [--dtype DTYPE] [--device DEVICE] [--symmetric]
                    filename [filename ...]
 
 positional arguments:
@@ -148,7 +148,6 @@ optional arguments:
   --ntau NTAU      pulse width of excitation in units of simulation steps (default: 20)
   --ndelay NDELAY  time delay of excitation in units of pulse widths (default: 6.5)
   --zo ZO          line impedance of ports in ohms (default: 50)
-  --ngpu NGPU      number of GPUs to use, or all by default (default: None)
   --dtype DTYPE    "float" or "double" data type (default: float)
   --device DEVICE  "cuda" or "cpu" compute device, otherwise will autodetect (default: None)
   --symmetric      make s-parameter matrices symmetric (default: False)

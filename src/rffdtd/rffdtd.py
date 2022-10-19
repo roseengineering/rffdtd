@@ -183,7 +183,6 @@ def simulate(filename,
              steps=None, 
              start=None, 
              stop=None, 
-             ngpu=None,
              symmetric=False
             ):
 
@@ -255,9 +254,7 @@ def simulate(filename,
     # run simulations
     start_time = time.time()
     nsim = stop - start
-    size = torch.cuda.device_count()
-    size = size if ngpu is None or ngpu > size else ngpu
-    size = min(nsim, size)
+    size = min(nsim, torch.cuda.device_count())
 
     # handle multiple gpus
     if device == 'cuda' and stop - start > 1 and size > 1:
