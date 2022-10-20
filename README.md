@@ -376,7 +376,7 @@ as the attributes 'f', 's', and 'z' respectively.
 
 The script snpsum.py in the util directory sums up the sparameters matrices 
 for each frequency across all the touchstone files passed on the 
-command line.  It then outputs the result to the console.
+command line.
 
 
 ```
