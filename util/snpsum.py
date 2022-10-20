@@ -8,25 +8,38 @@
 # The results can then be pulled together onto one machine
 # and summed up into one sparameter matrix using this utility.
 
+import argparse
 import numpy as np
 from rffdtd import load_touchstone, save_touchstone
 
-def main(*filename):
+def parse_args():
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        description='convert to impedances')
+    parser.add_argument('filenames', nargs='+', 
+        #metavar='filenames', 
+        help='touchstone or .npz files to union together')
+    parser.add_argument('--output', help='touchstone or .npz file to write output')
+    return parser.parse_args()
+
+
+def main(args):
     freq = None
-    for fn in filename:
-        f, s = load_touchstone(fn)
+    for fn in args.filenames:
+        f, s, z = load_touchstone(fn)
         if freq is None:
             freq = f
             sparam = s 
+            zo = z
         else:
+            assert(z == zo)
             assert(np.all(f == freq))
             assert(s.shape == sparam.shape)
             sparam += s
     if freq is not None:
-        save_touchstone(freq, sparam)
+        save_touchstone(freq, sparam, filename=args.output)
 
 
 if __name__ == "__main__":
-    import sys
-    main(*sys.argv[1:])
+    main(parse_args())
 
