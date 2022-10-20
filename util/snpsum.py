@@ -15,11 +15,9 @@ from rffdtd import load_touchstone, save_touchstone
 def parse_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-        description='convert to impedances')
-    parser.add_argument('filenames', nargs='+', 
-        #metavar='filenames', 
-        help='touchstone or .npz files to union together')
-    parser.add_argument('--output', help='touchstone or .npz file to write output')
+        description='sum up all the s-parameter files provided on the command line')
+    parser.add_argument('filename', nargs='+', help='touchstone or .npz file to union together')
+    parser.add_argument('--output', help='touchstone or .npz file to write the summed result into')
     return parser.parse_args()
 
 

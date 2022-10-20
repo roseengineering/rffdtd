@@ -5,6 +5,7 @@ import os, subprocess, re
 def run(command, language='', nopython=False):
     cmd = command if nopython else f"COLUMNS=95 PYTHONPATH=src python3 {command}" 
     command = command.replace('src/__main__.py', 'rffdtd')
+    command = command.replace('util/snpsum.py', 'python3 snpsum.py')
     proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     buf = proc.stdout.read().decode()
     buf = re.sub(r'^.*( \d+ / \d+ / \d+.*)$', r'\g<1>', buf, flags=re.MULTILINE)
@@ -278,6 +279,8 @@ as the attributes 'f', 's', and 'z' respectively.
 The script snpsum.py in the util directory sums up the sparameters matrices 
 for each frequency across all the touchstone files passed on the 
 command line.  It then outputs the result to the console.
+
+{run("util/snpsum.py --help")}
 
 snpsum.py should be useful when running
 a batch of simulations (each exciting a different set of
