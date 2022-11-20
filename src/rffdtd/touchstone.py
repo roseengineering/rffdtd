@@ -39,6 +39,8 @@ def read_touchstone(text):
     zo = 50
     dtype = None
     buf = ''
+    if isinstance(text, list): 
+        text = '\n'.join(text)
     f = iter(text.splitlines())
     while True:
         ln = next(f, None)
@@ -120,7 +122,7 @@ def save_touchstone(f, s, dtype=None, zo=None, precision=None, filename=None):
             np.savez(filename, f=f, s=s, z=z)
         else:
             p = pathlib.Path(filename)
-            if not p.is_char_device():
+            if not p.is_char_device() and filename[:5] != '/dev/':
                 nport = s.shape[1]
                 if ext != f'.s{nport}p':
                     filename = f'{filename}.s{nport}p'
