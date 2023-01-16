@@ -1,10 +1,7 @@
 
-import sys
-sys.path.append('../src')
-
 import numpy as np
 from csg.core import CSG
-from rffdtd.csgsave import openzip, rectangle
+from csgsave import openzip, rectangle
 
 
 comment = """\

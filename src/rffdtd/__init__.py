@@ -4,5 +4,6 @@ from .touchstone import read_touchstone, write_touchstone, load_touchstone, save
 from .qucsstudio import read_dat
 from .version import __version__
 
-# do not import csgsave here since pycsg might not be installed
+# do not import subpackages like csgsave here 
+# since external libraries like pycsg might not be installed
 

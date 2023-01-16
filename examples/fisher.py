@@ -1,12 +1,9 @@
 
-import sys
-sys.path.append('../src')
-
 import os
 import numpy as np
 from io import BytesIO
 from csg.core import CSG
-from rffdtd.csgsave import openzip, rectangle
+from csgsave import openzip, rectangle
 
 mm = 25.4
 

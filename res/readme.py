@@ -130,9 +130,9 @@ pycsg to generate these models.  To install pycsg run:
 $ pip install pycsg
 ```
 
-In addition there is a utility python library file, named csgsave.py, provided in the src
-directory and zipped up in rffdtd.
-The library contains code for saving the CSG solids pycsg creates as OFF files.
+In addition there is a utility python library file, named csgsave.py, provided in the example
+directory for saving the CSG solids pycsg creates as OFF files - see the code examples on
+how to use.
 Of course, you can also use FreeCAD or OpenSCAD to generate your own OFF files
 and simulation models as well.
 
